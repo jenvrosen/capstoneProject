@@ -1,10 +1,5 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
+from .. import db
 
 class User(db.Model):
     userID = db.Column(db.Integer, primary_key=True)
@@ -46,7 +41,3 @@ class CoursePrerequisite(db.Model):
     prerequisiteID = db.Column(db.Integer, primary_key=True)
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     prerequisiteCourseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
-    
-db.create_all()
-
-
