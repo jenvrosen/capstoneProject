@@ -1,61 +1,52 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
-# User Model
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    firstName = db.Column(db.String(50), nullable=False)
-    lastName = db.Column(db.String(50), nullable=False)
-    adminRole = db.Column(db.Boolean, default=False)
-    studentYear = db.Column(db.Integer) 
-    interest = db.Column(db.String(120))
+    hashedpassword = db.Column(db.String(128), nullable=False)
+    firstName = db.Column(db.String(64), nullable=False)
+    lastName = db.Column(db.String(64), nullable=False)
+    studentYear = db.Column(db.Integer, nullable=False)
+    isAdmin = db.Column(db.Boolean, default=False)
 
-# Course Model
 class Course(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+    courseID = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    courseNumber = db.Column(db.String(20), nullable=False)
-    prerequisites = db.Column(db.String(100))
-    term = db.Column(db.String(50))
-    editTimestamp = db.Column(db.DateTime)
+    courseNumber = db.Column(db.Integer, nullable=False)
+    department = db.Column(db.String(255), nullable=False)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-# TakenCourses Model
-class TakenCourses(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    #Many-to-One relationship with User model
-    userID = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    #Many-to-One relationship with Course model
-    courseID = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+class TakenCourse(db.Model):
+    takenCourseID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+    semesterTaken = db.Column(db.String(255), nullable=False)
 
-# JSONfile Model
-class JSONfile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fileName = db.Column(db.String(100), nullable=False)
-    fileContent = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime)
+class Plan(db.Model):
+    planID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    planName = db.Column(db.String(255), nullable=False)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Plans Model
-class Plans(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    #Many-to-One relationship with User
-    userID = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    planContent = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime)
+class PlanCourse(db.Model):
+    planCourseID = db.Column(db.Integer, primary_key=True)
+    planID = db.Column(db.Integer, db.ForeignKey('plan.planID'), nullable=False)
+    courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+    semesterRecommended = db.Column(db.String(255), nullable=False)
 
-# CoursesInPlans Model
-class CoursesInPlans(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    #Many-to-One relationship with Plans
-    planID = db.Column(db.Integer, db.ForeignKey('plans.id'), nullable=False)
-    #Many-to-One relationship with Course
-    courseID = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-
+class CoursePrerequisite(db.Model):
+    prerequisiteID = db.Column(db.Integer, primary_key=True)
+    courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+    prerequisiteCourseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+    
 db.create_all()
 
 
