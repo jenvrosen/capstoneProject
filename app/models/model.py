@@ -1,3 +1,4 @@
+from app import app
 from datetime import datetime
 from .. import db
 
@@ -41,3 +42,6 @@ class CoursePrerequisite(db.Model):
     prerequisiteID = db.Column(db.Integer, primary_key=True)
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     prerequisiteCourseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+
+with app.app_context():
+    db.create_all()
