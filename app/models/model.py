@@ -11,6 +11,16 @@ class User(db.Model):
     studentYear = db.Column(db.Integer, nullable=False)
     isAdmin = db.Column(db.Boolean, default=False)
 
+    def to_dict(self):
+        return {
+            'userID': self.userID,
+            'email': self.email,
+            'firstName': self.firstName,
+            'lastName': self.lastName,
+            'studentYear': self.studentYear,
+            'isAdmin': self.isAdmin
+        }
+
 class Course(db.Model):
     courseID = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
