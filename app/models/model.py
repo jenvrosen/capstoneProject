@@ -2,6 +2,8 @@ from app import app
 from datetime import datetime
 from .. import db
 
+#Creating the tables in the database
+
 class User(db.Model):
     userID = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -11,6 +13,7 @@ class User(db.Model):
     studentYear = db.Column(db.Integer, nullable=False)
     isAdmin = db.Column(db.Boolean, default=False)
 
+    #To serialize data and convert to JSON
     def to_dict(self):
         return {
             'userID': self.userID,
@@ -28,6 +31,16 @@ class Course(db.Model):
     department = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'courseID': self.courseID,
+            'title': self.title,
+            'description': self.description,
+            'department': self.department,
+            'created': self.created.isoformat(),
+            'updated': self.updated.isoformat()
+        }
 
 class TakenCourse(db.Model):
     takenCourseID = db.Column(db.Integer, primary_key=True)
