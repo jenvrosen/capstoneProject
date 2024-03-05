@@ -60,50 +60,5 @@ def delete_user(id):
 
 
 ### 
-# Insert Course, TakenCourse, Plan, PlanCourse operations here
+# Insert TakenCourse, Plan, PlanCourse, CoursePrerequisite operations here
 ###
-
-
-### CoursePrerequisite operations
-# Get all course prerequisites
-@dbapi_blueprint.route('/course_prerequisites', methods=['GET'])
-def get_course_prerequisites():
-    prerequisites = CoursePrerequisite.query.all()
-    return jsonify([prerequisite.to_dict() for prerequisite in prerequisites])
-
-# Get a single course prerequisite by ID
-@dbapi_blueprint.route('/course_prerequisites/<int:id>', methods=['GET'])
-def get_course_prerequisite(id):
-    prerequisite = CoursePrerequisite.query.get_or_404(id)
-    return jsonify(prerequisite.to_dict())
-
-# Create a new course prerequisite
-@dbapi_blueprint.route('/course_prerequisites', methods=['POST'])
-def create_course_prerequisite():
-    data = request.json
-    prerequisite = CoursePrerequisite(
-        courseID=data['courseID'],
-        prerequisiteCourseID=data['prerequisiteCourseID']
-    )
-    db.session.add(prerequisite)
-    db.session.commit()
-    return jsonify(prerequisite.to_dict()), 201
-
-# Update a course prerequisite
-@dbapi_blueprint.route('/course_prerequisites/<int:id>', methods=['PUT'])
-def update_course_prerequisite(id):
-    prerequisite = CoursePrerequisite.query.get_or_404(id)
-    data = request.json
-    prerequisite.courseID = data.get('courseID', prerequisite.courseID)
-    prerequisite.prerequisiteCourseID = data.get('prerequisiteCourseID', prerequisite.prerequisiteCourseID)
-    db.session.commit()
-    return jsonify(prerequisite.to_dict())
-
-# Delete a course prerequisite
-@dbapi_blueprint.route('/course_prerequisites/<int:id>', methods=['DELETE'])
-def delete_course_prerequisite(id):
-    prerequisite = CoursePrerequisite.query.get_or_404(id)
-    db.session.delete(prerequisite)
-    db.session.commit()
-    return '', 204
-
