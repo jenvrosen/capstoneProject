@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block styleLogin %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleLogin.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="login-container">
+  <h2>Login</h2>
+  <form action="Replace with log in endpoint" method="POST">
+    <div class="form-input">
+      <label for="username">email</label>
+      <input type="text" id="username" name="username" required />
+    </div>
+    <div class="form-input">
+      <label for="password">password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+    <button type="submit" class="login-button">Log In</button>
+  </form>
+</div>
+{% endblock content %}

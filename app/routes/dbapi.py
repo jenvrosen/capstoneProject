@@ -8,17 +8,19 @@ dbapi_blueprint = Blueprint('dbapi', __name__)
 
 ### Users Crud operations
 
+#/users is an endpoint of a specific path
+#methods are actions to take at route (GET POST PUT DELETE)
 # Get all users
 @dbapi_blueprint.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
-    return jsonify([user.to_dict() for user in users])
+    return jsonify([user.to_dict() for user in users]), 200
 
 # Get a single user by ID
 @dbapi_blueprint.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 200
 
 # Create a new user
 @dbapi_blueprint.route('/users', methods=['POST'])
@@ -49,7 +51,7 @@ def update_user(id):
     user.isAdmin = data.get('isAdmin', user.isAdmin)
 
     db.session.commit()
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 200
 
 # Delete a user
 @dbapi_blueprint.route('/users/<int:id>', methods=['DELETE'])
@@ -57,7 +59,8 @@ def delete_user(id):
     user = User.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
-    return '', 204
+    return ({'message': 'User deleted successfully'}), 204
+
 
 ### Course Crud Operations
 
@@ -104,7 +107,7 @@ def delete_course(course_id):
     course = Course.query.get_or_404(course_id)
     db.session.delete(course)
     db.session.commit()
-    return jsonify({'message': 'Course deleted successfully'}), 200
+    return jsonify({'message': 'Course deleted successfully'}), 204
 
 ### 
 # Insert TakenCourse, Plan, PlanCourse, CoursePrerequisite operations here

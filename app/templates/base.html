@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UCTorchAI - Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styleBase.css') }}"
+    />
+    <!-- To apply css of other pages-->
+    {% block styleLogin %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <div class="app-name">UCTorchAI</div>
+      <nav class="navbar">
+        <ul>
+          <!-- Hides navigation elements when in Login page-->
+          <!-- To hide, hideNavigation in login endpoint (found in view.py) has to be set to True-->
+          {% if not hideNavigation %}
+          <li><a href="/admin">Administrator</a></li>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/myprofile">My Profile</a></li>
+          <li><a href="/signout">Sign Out</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    {% block content %}
+    <!--Content of other pages being extended -->
+    {% endblock content %}
+  </body>
+</html>
