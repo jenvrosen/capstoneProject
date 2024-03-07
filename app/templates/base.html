@@ -17,7 +17,7 @@
       <nav class="navbar">
         <ul>
           <!-- Hides navigation elements when in Login page-->
-          <!-- To hide, hideNavigation in login endpoint (found in view.py) has to be set to True-->
+          <!-- To unhide, set hideNavigation to False in login endpoint (found in view.py)-->
           {% if not hideNavigation %}
           <li><a href="/admin">Administrator</a></li>
           <li><a href="/home">Home</a></li>
