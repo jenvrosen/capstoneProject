@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OpenAI Text Generation</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}">
+        <style>
+            .title {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>OpenAI Text Generation</h1>
+        <form method="post" action="/">
+            <label for="text">Enter Prompt:</label>
+            <input type="text" id="text" name="text">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        {% if result %}
+        <div class="result">
+            <h2>Result:</h2>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+    </body>
+</html>
