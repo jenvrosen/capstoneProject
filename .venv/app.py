@@ -11,7 +11,8 @@ client = OpenAI()
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        prompt = request.form['text']
+        data = request.json
+        prompt = data.get('prompt')
 
         output = client.chat.completions.create(
             model="gpt-3.5-turbo",  
@@ -21,13 +22,12 @@ def index():
               
            ],
             temperature=1,
-            max_tokens=256,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
         )
-        result = output.choices[0].message
-        return render_template('index.html', result=result)
+        result = output.choices[0].message.content
+        return result
     return render_template('index.html')
 
 
