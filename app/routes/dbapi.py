@@ -6,7 +6,11 @@ from ..models.model import User, Course, TakenCourse, Plan, PlanCourse, CoursePr
 
 dbapi_blueprint = Blueprint('dbapi', __name__)
 
+
+
 ### --- Users Crud operations --- ###
+
+
 
 #/users is an endpoint of a specific path
 #methods are actions to take at route (GET POST PUT DELETE)
@@ -62,7 +66,10 @@ def delete_user(id):
     return ({'message': 'User deleted successfully'}), 204
 
 
+
 ###  --- Course Crud Operations --- ###
+
+
 
 # Create a new course
 @dbapi_blueprint.route('/courses', methods=['POST'])
@@ -109,7 +116,11 @@ def delete_course(course_id):
     db.session.commit()
     return jsonify({'message': 'Course deleted successfully'}), 204
 
+
+
 ### --- Taken Course CRUD Operations --- ###
+
+
 
 # Create a new taken course
 @dbapi_blueprint.route('/taken-courses', methods=['POST'])
@@ -155,7 +166,11 @@ def delete_taken_course(taken_course_id):
     db.session.commit()
     return jsonify({'message': 'TakenCourse deleted successfully'}), 204
 
+
+
 ### --- Plan CRUD Operations --- ###
+
+
 
 # Create a new plan
 @dbapi_blueprint.route('/plans', methods=['POST'])
@@ -199,7 +214,10 @@ def delete_plan(id):
     return jsonify({'message': 'Plan deleted successfully'}), 204
 
 
+
 ### --- Plan Course CRUD Operations --- ###
+
+
 
 # Create a new plan course
 @dbapi_blueprint.route('/plan-courses', methods=['POST'])
@@ -243,7 +261,11 @@ def delete_plan_course(id):
     db.session.commit()
     return jsonify({'message': 'PlanCourse deleted successfully'}), 204
 
+
+
 ### --- Course Prerequisites CRUD operations --- ###
+
+
 
 # Create a new course prerequisite
 @dbapi_blueprint.route('/course-prerequisites', methods=['POST'])
