@@ -6,7 +6,11 @@ from ..models.model import User, Course, TakenCourse, Plan, PlanCourse, CoursePr
 
 dbapi_blueprint = Blueprint('dbapi', __name__)
 
-### Users Crud operations
+
+
+### --- Users Crud operations --- ###
+
+
 
 #/users is an endpoint of a specific path
 #methods are actions to take at route (GET POST PUT DELETE)
@@ -62,7 +66,10 @@ def delete_user(id):
     return ({'message': 'User deleted successfully'}), 204
 
 
-### Course Crud Operations
+
+###  --- Course Crud Operations --- ###
+
+
 
 # Create a new course
 @dbapi_blueprint.route('/courses', methods=['POST'])
@@ -109,7 +116,194 @@ def delete_course(course_id):
     db.session.commit()
     return jsonify({'message': 'Course deleted successfully'}), 204
 
-### 
-# Insert TakenCourse, Plan, PlanCourse, CoursePrerequisite operations here
-# Make sure route decorator says @dbapi_blueprint.route
-###
+
+
+### --- Taken Course CRUD Operations --- ###
+
+
+
+# Create a new taken course
+@dbapi_blueprint.route('/taken-courses', methods=['POST'])
+def add_taken_course():
+    data = request.get_json()
+    new_taken_course = TakenCourse(
+        userID=data['userID'],
+        courseID=data['courseID'],
+        semesterTaken=data['semesterTaken']
+    )
+    db.session.add(new_taken_course)
+    db.session.commit()
+    return jsonify(new_taken_course.to_dict()), 201
+
+# Get all taken courses
+@dbapi_blueprint.route('/taken-courses', methods=['GET'])
+def get_taken_courses():
+    taken_courses = TakenCourse.query.all()
+    return jsonify([taken_course.to_dict() for taken_course in taken_courses]), 200
+
+# Get Taken course by ID
+@dbapi_blueprint.route('/taken-courses/<int:taken_course_id>', methods=['GET'])
+def get_taken_course(taken_course_id):
+    taken_course = TakenCourse.query.get_or_404(taken_course_id)
+    return jsonify(taken_course.to_dict()), 200
+
+# Update taken course
+@dbapi_blueprint.route('/taken-courses/<int:taken_course_id>', methods=['PUT'])
+def update_taken_course(taken_course_id):
+    taken_course = TakenCourse.query.get_or_404(taken_course_id)
+    data = request.json
+    taken_course.userID = data.get('userID', taken_course.userID)
+    taken_course.courseID = data.get('courseID', taken_course.courseID)
+    taken_course.semesterTaken = data.get('semesterTaken', taken_course.semesterTaken)
+    db.session.commit()
+    return jsonify(taken_course.to_dict()), 200
+
+# Delete taken course
+@dbapi_blueprint.route('/taken-courses/<int:taken_course_id>', methods=['DELETE'])
+def delete_taken_course(taken_course_id):
+    taken_course = TakenCourse.query.get_or_404(taken_course_id)
+    db.session.delete(taken_course)
+    db.session.commit()
+    return jsonify({'message': 'TakenCourse deleted successfully'}), 204
+
+
+
+### --- Plan CRUD Operations --- ###
+
+
+
+# Create a new plan
+@dbapi_blueprint.route('/plans', methods=['POST'])
+def add_plan():
+    data = request.get_json()
+    new_plan = Plan(
+        userID=data['userID'],
+        planName=data['planName']
+    )
+    db.session.add(new_plan)
+    db.session.commit()
+    return jsonify(new_plan.to_dict()), 201
+
+# Get all plans
+@dbapi_blueprint.route('/plans', methods=['GET'])
+def get_plans():
+    plans = Plan.query.all()
+    return jsonify([plan.to_dict() for plan in plans]), 200
+
+# Get plan by ID
+@dbapi_blueprint.route('/plans/<int:id>', methods=['GET'])
+def get_plan(id):
+    plan = Plan.query.get_or_404(id)
+    return jsonify(plan.to_dict()), 200
+
+# Update plan
+@dbapi_blueprint.route('/plans/<int:id>', methods=['PUT'])
+def update_plan(id):
+    plan = Plan.query.get_or_404(id)
+    data = request.json
+    plan.planName = data['planName']
+    db.session.commit()
+    return jsonify(plan.to_dict()), 200
+
+# Delete Plan
+@dbapi_blueprint.route('/plans/<int:id>', methods=['DELETE'])
+def delete_plan(id):
+    plan = Plan.query.get_or_404(id)
+    db.session.delete(plan)
+    db.session.commit()
+    return jsonify({'message': 'Plan deleted successfully'}), 204
+
+
+
+### --- Plan Course CRUD Operations --- ###
+
+
+
+# Create a new plan course
+@dbapi_blueprint.route('/plan-courses', methods=['POST'])
+def add_plan_course():
+    data = request.get_json()
+    new_plan_course = PlanCourse(
+        planID=data['planID'],
+        courseID=data['courseID'],
+        semesterRecommended=data['semesterRecommended']
+    )
+    db.session.add(new_plan_course)
+    db.session.commit()
+    return jsonify(new_plan_course.to_dict()), 201
+
+# Get all plan courses
+@dbapi_blueprint.route('/plan-courses', methods=['GET'])
+def get_plan_courses():
+    plan_courses = PlanCourse.query.all()
+    return jsonify([plan_course.to_dict() for plan_course in plan_courses]), 200
+
+# Get plan course by ID
+@dbapi_blueprint.route('/plan-courses/<int:id>', methods=['GET'])
+def get_plan_course(id):
+    plan_course = PlanCourse.query.get_or_404(id)
+    return jsonify(plan_course.to_dict()), 200
+
+# Update plan course
+@dbapi_blueprint.route('/plan-courses/<int:id>', methods=['PUT'])
+def update_plan_course(id):
+    plan_course = PlanCourse.query.get_or_404(id)
+    data = request.json
+    plan_course.semesterRecommended = data['semesterRecommended']
+    db.session.commit()
+    return jsonify(plan_course.to_dict()), 200
+
+# Delete plan course
+@dbapi_blueprint.route('/plan-courses/<int:id>', methods=['DELETE'])
+def delete_plan_course(id):
+    plan_course = PlanCourse.query.get_or_404(id)
+    db.session.delete(plan_course)
+    db.session.commit()
+    return jsonify({'message': 'PlanCourse deleted successfully'}), 204
+
+
+
+### --- Course Prerequisites CRUD operations --- ###
+
+
+
+# Create a new course prerequisite
+@dbapi_blueprint.route('/course-prerequisites', methods=['POST'])
+def add_course_prerequisite():
+    data = request.get_json()
+    new_course_prerequisite = CoursePrerequisite(
+        courseID=data['courseID'],
+        prerequisiteCourseID=data['prerequisiteCourseID']
+    )
+    db.session.add(new_course_prerequisite)
+    db.session.commit()
+    return jsonify(new_course_prerequisite.to_dict()), 201
+
+# Get all course prerequisites
+@dbapi_blueprint.route('/course-prerequisites', methods=['GET'])
+def get_course_prerequisites():
+    course_prerequisites = CoursePrerequisite.query.all()
+    return jsonify([course_prerequisite.to_dict() for course_prerequisite in course_prerequisites]), 200
+
+# Get course prerequisite by ID
+@dbapi_blueprint.route('/courseprerequisites/<int:id>', methods=['GET'])
+def get_course_prerequisite(id):
+    course_prerequisite = CoursePrerequisite.query.get_or_404(id)
+    return jsonify(course_prerequisite.to_dict()), 200
+
+# Update course prerequisite
+@dbapi_blueprint.route('/courseprerequisites/<int:id>', methods=['PUT'])
+def update_course_prerequisite(id):
+    course_prerequisite = CoursePrerequisite.query.get_or_404(id)
+    data = request.json
+    course_prerequisite.prerequisiteCourseID = data['prerequisiteCourseID']
+    db.session.commit()
+    return jsonify(course_prerequisite.to_dict()), 200
+
+# Delete course prerequisite
+@dbapi_blueprint.route('/courseprerequisites/<int:id>', methods=['DELETE'])
+def delete_course_prerequisite(id):
+    course_prerequisite = CoursePrerequisite.query.get_or_404(id)
+    db.session.delete(course_prerequisite)
+    db.session.commit()
+    return jsonify({'message': 'CoursePrerequisite deleted successfully'}), 204
