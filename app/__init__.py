@@ -13,7 +13,7 @@ from app.models.model import User, Course, TakenCourse, Plan, PlanCourse, Course
 
 # Importing DB routes/blueprints
 from .routes.dbapi import dbapi_blueprint
-app.register_blueprint(dbapi_blueprint, url_prefix='/api')
+app.register_blueprint(dbapi_blueprint, url_prefix='/dbapi')
 
 # Importing front end routes/blueprints
 from app.routes.view import view_blueprint

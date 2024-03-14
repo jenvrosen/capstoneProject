@@ -32,7 +32,7 @@ def create_user():
     data = request.json
     user = User(
         email=data['email'], 
-        hashedpassword=data['hashedpassword'], 
+        #hashedpassword=data['hashedpassword'], 
         firstName=data['firstName'], 
         lastName=data['lastName'], 
         studentYear=data['studentYear'],
