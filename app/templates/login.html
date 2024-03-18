@@ -6,16 +6,31 @@
 {% endblock %} {% block content %}
 <div class="login-container">
   <h2>Login</h2>
-  <form action="Replace with log in endpoint" method="POST">
+  <form action="/REPLACE_THIS" method="POST">
     <div class="form-input">
-      <label for="username">email</label>
-      <input type="text" id="username" name="username" required />
+      <input type="text" id="email" name="email" required placeholder="Email" />
     </div>
     <div class="form-input">
-      <label for="password">password</label>
-      <input type="password" id="password" name="password" required />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+        placeholder="Password"
+      />
     </div>
-    <button type="submit" class="login-button">Log In</button>
+    <button type="submit" class="login-button">Submit</button>
   </form>
+  <hr class="separator" />
+  <div class="signup-section">
+    <p>Are you new here?</p>
+    <button
+      type="button"
+      class="signup-button"
+      onclick="window.location.href='/signup'"
+    >
+      Sign Up
+    </button>
+  </div>
 </div>
-{% endblock content %}
+{% endblock %}

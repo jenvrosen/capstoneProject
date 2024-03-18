@@ -9,6 +9,11 @@ def login():
     return render_template('login.html', hideNavigation=True)
 
 # Render the Administrator page
+@view_blueprint.route('/signup')
+def signup():
+    return render_template('signup.html', hideNavigation=True)
+
+# Render the Administrator page
 @view_blueprint.route('/admin')
 def admin():
     return render_template('admin.html', hideNavigation=False)
