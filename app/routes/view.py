@@ -1,5 +1,6 @@
 #Routes of app that render HTML templates
 from flask import Blueprint, render_template, redirect, url_for
+from app.models.model import Course, CoursePrerequisite
 
 view_blueprint = Blueprint('view', __name__)
 
@@ -16,7 +17,9 @@ def signup():
 # Render the Administrator page
 @view_blueprint.route('/admin')
 def admin():
-    return render_template('admin.html', hideNavigation=False)
+    courses = Course.query.all()  # Fetch all courses
+    prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
+    return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
 
 # Render the Profile page
 @view_blueprint.route('/myprofile')

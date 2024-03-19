@@ -1,6 +1,51 @@
 {% extends 'base.html' %} {% block styleLogin %}
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='css/REPLACE_THIS.css') }}"
+  href="{{ url_for('static', filename='css/styleSignup.css') }}"
 />
-{% endblock %} {% block content %} {% endblock %}
+{% endblock %} {% block content %}
+<div class="login-container">
+  <h2>Sign Up</h2>
+  <form action="/signup" method="POST">
+    <div class="form-row">
+      <div class="form-input half">
+        <input
+          type="text"
+          id="first_name"
+          name="first_name"
+          required
+          placeholder="First Name"
+        />
+      </div>
+      <div class="form-input half">
+        <input
+          type="text"
+          id="last_name"
+          name="last_name"
+          required
+          placeholder="Last Name"
+        />
+      </div>
+    </div>
+    <div class="form-input">
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        placeholder="Email"
+      />
+    </div>
+    <div class="form-input">
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+        placeholder="Password"
+      />
+    </div>
+    <button type="submit" class="login-button">Submit</button>
+  </form>
+</div>
+{% endblock %}
