@@ -63,6 +63,7 @@ class Plan(db.Model):
     planID = db.Column(db.Integer, primary_key=True)
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     planName = db.Column(db.String(255), nullable=False)
+    courses = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
     #Establish relationship to User
@@ -73,6 +74,7 @@ class Plan(db.Model):
             'planID': self.planID,
             'userID': self.userID,
             'planName': self.planName,
+            'courses': self.courses,
             'created': self.created.isoformat()  
         }
 

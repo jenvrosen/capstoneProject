@@ -176,9 +176,14 @@ def delete_taken_course(taken_course_id):
 @dbapi_blueprint.route('/plans', methods=['POST'])
 def add_plan():
     data = request.get_json()
+
+    if 'courses' not in data or not data['courses'].strip():
+        return jsonify({'error': 'Courses cannot be empty'}), 400
+
     new_plan = Plan(
         userID=data['userID'],
-        planName=data['planName']
+        planName=data['planName'],
+        courses=data['courses']
     )
     db.session.add(new_plan)
     db.session.commit()
@@ -201,7 +206,11 @@ def get_plan(id):
 def update_plan(id):
     plan = Plan.query.get_or_404(id)
     data = request.json
+    if 'courses' not in data or not data['courses'].strip():
+        return jsonify({'error': 'Courses cannot be empty'}), 400
+
     plan.planName = data['planName']
+    plan.courses = data['courses']
     db.session.commit()
     return jsonify(plan.to_dict()), 200
 
