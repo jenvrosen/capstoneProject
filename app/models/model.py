@@ -48,6 +48,9 @@ class TakenCourse(db.Model):
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     semesterTaken = db.Column(db.String(255), nullable=False)
 
+    #Establish the relationship to User
+    user = db.relationship('User', backref=db.backref('taken_courses', lazy=True))
+
     def to_dict(self):
         return {
             'takenCourseID': self.takenCourseID,
@@ -61,6 +64,9 @@ class Plan(db.Model):
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     planName = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    #Establish relationship to User
+    user = db.relationship('User', backref=db.backref('plans', lazy='dynamic'))
 
     def to_dict(self):
         return {
@@ -76,6 +82,10 @@ class PlanCourse(db.Model):
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     semesterRecommended = db.Column(db.String(255), nullable=False)
 
+    #Establish relationships with Plan and Course
+    plan = db.relationship('Plan', backref=db.backref('plan_courses', lazy='dynamic'))
+    course = db.relationship('Course', backref=db.backref('plan_courses', lazy='dynamic'))
+
     def to_dict(self):
         return {
             'planCourseID': self.planCourseID,
@@ -88,6 +98,9 @@ class CoursePrerequisite(db.Model):
     prerequisiteID = db.Column(db.Integer, primary_key=True)
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     prerequisiteCourseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
+
+    course = db.relationship('Course', foreign_keys=[courseID], backref=db.backref('prerequisites', lazy='dynamic'))
+    prerequisite_course = db.relationship('Course', foreign_keys=[prerequisiteCourseID], backref=db.backref('is_prerequisite_for', lazy='dynamic'))
 
     def to_dict(self):
         return {
