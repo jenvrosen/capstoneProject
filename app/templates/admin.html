@@ -43,11 +43,13 @@
   <div id="CourseCatalog" class="tabcontent">
     <table id="courseCatalogTable">
       <tr>
-        <th>Action</th>
+        <th>Actions</th>
         <th>Course ID</th>
         <th>Title</th>
         <th>Description</th>
         <th>Department</th>
+        <th>Created</th>
+        <th>Updated</th>
       </tr>
       {% for course in courses %}
       <tr id="courseRow{{ course.courseID }}">
@@ -63,6 +65,8 @@
         <td>{{ course.title }}</td>
         <td>{{ course.description }}</td>
         <td>{{ course.department }}</td>
+        <td>{{ course.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td>{{ course.updated.strftime('%Y-%m-%d %H:%M:%S') }}</td>
       </tr>
       {% endfor %}
     </table>
