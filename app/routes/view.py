@@ -21,6 +21,12 @@ def admin():
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
     return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
 
+#Render the Edit course page
+@view_blueprint.route('/edit_course/<int:course_id>')
+def edit_course(course_id):
+    course = Course.query.get_or_404(course_id) 
+    return render_template('edit_course.html', course=course)  
+
 # Render the Profile page
 @view_blueprint.route('/myprofile')
 def my_profile():
