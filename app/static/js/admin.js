@@ -16,8 +16,41 @@ function openTab(evt, tabName) {
 
 /* --- Actions [Edit and Delete] --- */
 
+//To navigate to edit course page
 function editCourse(courseID) {
   window.location.href = `/edit_course/${courseID}`; // Redirect to the edit course page
+}
+
+function updateCourse(courseID) {
+  const title = document.getElementById("title").value;
+  const department = document.getElementById("department").value;
+  const description = document.getElementById("description").value.trim();
+
+  fetch(`/dbapi/courses/${courseID}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: title,
+      description: description,
+      department: department,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("Course updated successfully");
+        window.location.href = "/admin";
+      } else {
+        response.json().then((data) => {
+          alert("Failed to update course: " + data.message);
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred while updating the course");
+    });
 }
 
 function deleteCourse(courseID) {
