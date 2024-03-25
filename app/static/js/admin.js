@@ -17,7 +17,7 @@ function openTab(evt, tabName) {
 /* --- Actions [Edit and Delete] --- */
 
 function editCourse(courseID) {
-  window.location.href = `/update_course/${courseID}`; // Redirect to the edit course page
+  window.location.href = `/edit_course/${courseID}`; // Redirect to the edit course page
 }
 
 function deleteCourse(courseID) {
