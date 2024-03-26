@@ -14,6 +14,41 @@ function openTab(evt, tabName) {
 
 /* --- Searching a course --- */
 
+/* --- Creating a course --- */
+function createCourse() {
+  const title = document.getElementById("title").value;
+  const department = document.getElementById("department").value;
+  const description = document.getElementById("description").value;
+
+  fetch("/dbapi/courses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: title,
+      description: description,
+      department: department,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("Course created successfully");
+        window.location.href = "/admin";
+      } else {
+        return response.json().then((data) => {
+          throw new Error(
+            data.message || "An error occurred while creating the course"
+          );
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Error creating course: " + error.message);
+    });
+}
+
 /* --- Actions [Edit and Delete] --- */
 
 //To navigate to edit course page
@@ -72,7 +107,6 @@ function deleteCourse(courseID) {
             );
           }
         } else {
-          // If the server responds but not with a 204 status, handle other responses
           return response.json().then((data) => {
             alert(
               "Error deleting course: " + (data.message || "Unknown error")

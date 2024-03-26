@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block styleEditCourse %}
+{% extends 'base.html' %} {% block styleLogin %}
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/styleEditCourse.css') }}"
@@ -10,14 +10,10 @@
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %} {% block content %}
 <div class="edit-course-container">
-  <form
-    action="/update_course/{{ course.courseID }}"
-    method="post"
-    class="edit-course-form"
-  >
+  <form class="edit-course-form" onsubmit="createCourse(); return false;">
     <div class="form-field">
       <label for="title">Title:</label>
-      <input type="text" id="title" name="title" value="{{ course.title }}" />
+      <input type="text" id="title" name="title" placeholder="Course Title" />
     </div>
     <div class="form-field">
       <label for="department">Department:</label>
@@ -25,19 +21,19 @@
         type="text"
         id="department"
         name="department"
-        value="{{ course.department }}"
+        placeholder="Department Name"
       />
     </div>
     <div class="form-field">
       <label for="description">Description:</label>
-      <textarea id="description" name="description">
-{{ course.description }}</textarea
-      >
+      <textarea
+        id="description"
+        name="description"
+        placeholder="Course Description"
+      ></textarea>
     </div>
     <div class="button-container">
-        <button type="button" onclick="updateCourse('{{ course.courseID }}')">Update Course</button>
-
-    </div>
+      <button type="submit">Create Course</button>
     </div>
   </form>
 </div>
