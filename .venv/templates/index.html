@@ -1,42 +1,60 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>UC TorchAI *Subject to Change*</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}">
-    </head>
-    <body>
-        <h1>UC TorchAI *Subject to Change*</h1>
-        <div class="container" id="container">
-            <div class="plan-container" id="plan-container">
-                <h2 id="plans">Saved Plans</h2>             
+{% extends 'base.html' %} {% block styleLogin %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}">
+{% endblock %} {% block content %}
+    <div class="container" id="container">
+        <div class="plan-container" id="plan-container">
+            <h2>Saved Plans</h2>             
+        </div>
+        <div class="chat-container" id="chat-container">
+            <h2 id="virtual-advisor">Virtual Advisor</h2>
+            <div class="message-container" id="message-container">
             </div>
-            <div class="chat-container" id="chat-container">
-                <h2 id="virtual-advisor">Virtual Advisor</h2>
-                <div class="message-container" id="message-container">
-                </div>
-                <div class="input-container">
-                    <input type="text" id="prompt" name="prompt" placeholder="Enter prompt...">
-                    <button class="send-btn" onclick="sendMessage()">Send</button>
-                </div>
+            <div class="input-container">
+                <input type="text" id="prompt" name="prompt" placeholder="Enter prompt...">
+                <button class="send-btn" onclick="sendMessage()" disabled>Send</button>
             </div>
         </div>
-        <script>
-            function sendMessage() {
-                var prompt = document.getElementById('prompt').value;
-                addMessage('user', prompt);
+    </div>
+    <script>
+        const promptInput = document.getElementById('prompt');
+        const sendBtn = document.getElementById('send-btn');
 
-                var xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "/");
-                xhttp.setRequestHeader("Content-Type", "application/json");
-                const body = {prompt: prompt};
-                xhttp.send(JSON.stringify(body));
+        // Add an input event listener to the input field
+        promptInput.addEventListener('input', function() {
+            // Enable or disable the send button based on whether the input field has text
+            if (promptInput.value.trim() !== '') {
+                sendBtn.disabled = false;
+            } else {
+                sendBtn.disabled = true;
+            }
+        });
 
-                xhttp.onload = function() {
-                    addMessage('bot', xhttp.responseText);
-                }
+        function sendMessage() {
+            var prompt = document.getElementById('prompt').value;
+            addMessage('user', prompt);
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/home");
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            const body = {prompt: prompt};
+            xhttp.send(JSON.stringify(body));
+
+            xhttp.onload = function() {
+                addMessage('bot', xhttp.responseText);
             }
 
-            function addMessage(sender, message) {
+            document.getElementById('prompt').value = '';
+        }
+
+        // Allows user to send message using 'Enter' key
+        document.getElementById('prompt').addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function addMessage(sender, message) {
                 const chatContainer = document.getElementById('message-container');
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
@@ -58,20 +76,20 @@
                         modal.classList.add('modal');
 
                         plan.addEventListener('click', function() {
-                            openModal();
+                            openModal(modal);
                         });
 
                         const closeBtn = document.createElement('button');
                         closeBtn.classList.add('close-btn');
                         closeBtn.addEventListener('click', function() {
-                            closeModal();
+                            closeModal(modal);
                         });
 
-                        const modalContent = document.createElement('p');
+                        const modalContent = document.createElement('div');
                         modalContent.classList.add('modal-content');
-                        modalContent.textContent = message;
+                        modalContent.innerText = message;
 
-                        modal.appendChild(closeBtn);
+                        modalContent.appendChild(closeBtn);
                         modal.appendChild(modalContent);
                         planContainer.appendChild(plan);
                         planContainer.appendChild(modal);
@@ -81,23 +99,22 @@
             }
 
 
-            function openModal() {
-                const modal = document.querySelector('.modal');
+            function openModal(modal) {
                 modal.style.display = 'block';
             }
 
-            function closeModal() {
-                const modal = document.querySelector('.modal');
+            function closeModal(modal) {
                 modal.style.display = 'none';
             }
 
 
             window.onclick = function(event) {
-                const modal = document.querySelector('modal');
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(function(modal) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                });
             }
-        </script>
-    </body>
-</html>
+    </script>
+{% endblock %}

@@ -1,136 +1,131 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>UC TorchAI *Subject to Change*</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}">
-    <body>
-        <h1>UC TorchAI *Subject to Change*</h1>
-        <div class="profile-container" id="chat-container">
-            <h2>My Profile</h2>
-            <div class="selection-container" id="selection-container">
-                <h3>Course History (Select all that apply)</h3>
-                <div class="checkbox" id="checkbox">
-                    <div class="checkbox-content">
-                        <label><input type="checkbox" value="CSE 015"> CSE 015 - Discrete Mathematics</label>
-                        <label><input type="checkbox" value="CSE 022"> CSE 022 - Introduction to Programming</label>
-                        <label><input type="checkbox" value="CSE 024"> CSE 024 - Advanced Programming</label>
-                        <label><input type="checkbox" value="CSE 030"> CSE 030 - Data structures</label>
-                        <label><input type="checkbox" value="CSE 031"> CSE 031 - Computer Organization and Assembly Language</label>
-                        <label><input type="checkbox" value="CSE 100"> CSE 100 - Algorithm Design and Analysis</label>
-                        <label><input type="checkbox" value="CSE 107"> CSE 107 - Introduction to Image Processing</label>
-                        <label><input type="checkbox" value="CSE 108"> CSE 108 - Fullstack Web Development</label>
-                        <label><input type="checkbox" value="CSE 111"> CSE 111 - Database Systems</label>
-                        <label><input type="checkbox" value="CSE 120"> CSE 120 - Software Engineering</label>
-                        <label><input type="checkbox" value="CSE 135"> CSE 135 - Introduction to Theory of Computation</label>
-                        <label><input type="checkbox" value="CSE 140"> CSE 140 - Computer Architecture</label>
-                        <label><input type="checkbox" value="CSE 150"> CSE 150 - Operating Systems</label>
-                        <label><input type="checkbox" value="CSE 155"> CSE 155 - Introduction to Human-Computer Interaction</label>
-                        <label><input type="checkbox" value="CSE 160"> CSE 160 - Computer Networks</label>
-                        <label><input type="checkbox" value="CSE 165"> CSE 165 - Introduction to Object Oriented Programming</label>
-                        <label><input type="checkbox" value="CSE 170"> CSE 170 - Computer Graphics</label>
-                        <label><input type="checkbox" value="CSE 171"> CSE 171 - Programming Interactive 3D Graphics and Games</label>
-                        <label><input type="checkbox" value="CSE 173"> CSE 173 - Computational Cognitive Neuroscience</label>
-                        <label><input type="checkbox" value="CSE 175"> CSE 175 - Introduction to Artifical Intelligence</label>
-                        <label><input type="checkbox" value="CSE 176"> CSE 176 - Introduction to Machine Learning</label>
-                        <label><input type="checkbox" value="CSE 177"> CSE 177 - Database Systems Implementation</label>
-                        <label><input type="checkbox" value="CSE 178"> CSE 178 - Computer and Networks Security</label>
-                        <label><input type="checkbox" value="CSE 179"> CSE 179 - Introduction to Parallel Computing</label>
-                        <label><input type="checkbox" value="CSE 180"> CSE 180 - Introduction to Robotics</label>
-                        <label><input type="checkbox" value="CSE 185"> CSE 185 - Introduction to Computer Vision</label>
-                    <!-- Add more courses as needed -->
-                    </div>
-                </div>  
-                <div class="selected-courses" id="selected-courses"></div>
-            </div>
-            <div class="selection-container" id="selection-container">
-                <h3>Current Academic Year</h3>
-                <div class="dropdown">
-                    <p class="dropbtn" onclick="toggleDropdown()">Select Academic Year</p>
-                    <div class="dropdown-content" id="dropdown-content">
-                        <a href="#" onclick="selectYear('1st Year - Freshman')">1st Year - Freshman</a>
-                        <a href="#" onclick="selectYear('2nd Year - Sophomore')">2nd Year - Sophomore</a>
-                        <a href="#" onclick="selectYear('3rd Year - Junior')">3rd Year - Junior</a>
-                        <a href="#" onclick="selectYear('4th Year - Senior')">4th Year - Senior</a>
-                        <a href="#" onclick="selectYear('5+ Years')">5+ Years</a>
-                    </div>
+{% extends 'base.html' %} {% block styleLogin %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css' )}}">
+{% endblock %} {% block content %}
+    <div class="profile-container" id="chat-container">
+        <h2>My Profile</h2>
+        <div class="selection-container" id="selection-container">
+            <h3>Course History (Select all that apply)</h3>
+            <div class="checkbox" id="checkbox">
+                <div class="checkbox-content">
+                    <label><input type="checkbox" value="CSE 015"> CSE 015 - Discrete Mathematics</label>
+                    <label><input type="checkbox" value="CSE 022"> CSE 022 - Introduction to Programming</label>
+                    <label><input type="checkbox" value="CSE 024"> CSE 024 - Advanced Programming</label>
+                    <label><input type="checkbox" value="CSE 030"> CSE 030 - Data structures</label>
+                    <label><input type="checkbox" value="CSE 031"> CSE 031 - Computer Organization and Assembly Language</label>
+                    <label><input type="checkbox" value="CSE 100"> CSE 100 - Algorithm Design and Analysis</label>
+                    <label><input type="checkbox" value="CSE 107"> CSE 107 - Introduction to Image Processing</label>
+                    <label><input type="checkbox" value="CSE 108"> CSE 108 - Fullstack Web Development</label>
+                    <label><input type="checkbox" value="CSE 111"> CSE 111 - Database Systems</label>
+                    <label><input type="checkbox" value="CSE 120"> CSE 120 - Software Engineering</label>
+                    <label><input type="checkbox" value="CSE 135"> CSE 135 - Introduction to Theory of Computation</label>
+                    <label><input type="checkbox" value="CSE 140"> CSE 140 - Computer Architecture</label>
+                    <label><input type="checkbox" value="CSE 150"> CSE 150 - Operating Systems</label>
+                    <label><input type="checkbox" value="CSE 155"> CSE 155 - Introduction to Human-Computer Interaction</label>
+                    <label><input type="checkbox" value="CSE 160"> CSE 160 - Computer Networks</label>
+                    <label><input type="checkbox" value="CSE 165"> CSE 165 - Introduction to Object Oriented Programming</label>
+                    <label><input type="checkbox" value="CSE 170"> CSE 170 - Computer Graphics</label>
+                    <label><input type="checkbox" value="CSE 171"> CSE 171 - Programming Interactive 3D Graphics and Games</label>
+                    <label><input type="checkbox" value="CSE 173"> CSE 173 - Computational Cognitive Neuroscience</label>
+                    <label><input type="checkbox" value="CSE 175"> CSE 175 - Introduction to Artifical Intelligence</label>
+                    <label><input type="checkbox" value="CSE 176"> CSE 176 - Introduction to Machine Learning</label>
+                    <label><input type="checkbox" value="CSE 177"> CSE 177 - Database Systems Implementation</label>
+                    <label><input type="checkbox" value="CSE 178"> CSE 178 - Computer and Networks Security</label>
+                    <label><input type="checkbox" value="CSE 179"> CSE 179 - Introduction to Parallel Computing</label>
+                    <label><input type="checkbox" value="CSE 180"> CSE 180 - Introduction to Robotics</label>
+                    <label><input type="checkbox" value="CSE 185"> CSE 185 - Introduction to Computer Vision</label>
+                <!-- Add more courses as needed -->
                 </div>
-                <div class="selected-year" id="selected-year"></div>
-            </div>
-                     
+            </div>  
+            <div class="selected-courses" id="selected-courses"></div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]');
-                
-                checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('click', function() {
-                        const label = checkbox.parentElement;
-                        if (checkbox.checked) {
-                            label.classList.add('selected');
-                        } else {
-                            label.classList.remove('selected');
-                        }
-                    });
-                });
-            });
-
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const selectedCoursesDiv = document.getElementById('selected-courses');
-            let selectedCourses = [];
-
+        <div class="selection-container" id="selection-container">
+            <h3>Current Academic Year</h3>
+            <div class="dropdown">
+                <p class="dropbtn" onclick="toggleDropdown()">Select Academic Year</p>
+                <div class="dropdown-content" id="dropdown-content">
+                    <a href="#" onclick="selectYear('1st Year - Freshman')">1st Year - Freshman</a>
+                    <a href="#" onclick="selectYear('2nd Year - Sophomore')">2nd Year - Sophomore</a>
+                    <a href="#" onclick="selectYear('3rd Year - Junior')">3rd Year - Junior</a>
+                    <a href="#" onclick="selectYear('4th Year - Senior')">4th Year - Senior</a>
+                    <a href="#" onclick="selectYear('5+ Years')">5+ Years</a>
+                </div>
+            </div>
+            <div class="selected-year" id="selected-year"></div>
+        </div>
+                    
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]');
+            
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('click', function() {
-                    const courseName = this.value;
-                    if (this.checked) {
-                        if (!selectedCourses.includes(courseName)) {
-                            selectedCourses.push(courseName);
-                        }
+                    const label = checkbox.parentElement;
+                    if (checkbox.checked) {
+                        label.classList.add('selected');
                     } else {
-                        const index = selectedCourses.indexOf(courseName);
-                        if (index !== -1) {
-                            selectedCourses.splice(index, 1);
-                        }
+                        label.classList.remove('selected');
                     }
-                    updateSelectedCourses();
                 });
             });
+        });
 
-            function updateSelectedCourses() {
-                // Sort the selectedCourses array
-                selectedCourses.sort();
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const selectedCoursesDiv = document.getElementById('selected-courses');
+        let selectedCourses = [];
 
-                // Update the selectedCoursesDiv with the sorted courses
-                selectedCoursesDiv.innerHTML = '';
-                selectedCourses.forEach(course => {
-                    const courseElement = document.createElement('div');
-                    courseElement.classList.add('added-course')
-                    courseElement.textContent = course;
-                    selectedCoursesDiv.appendChild(courseElement);
-                });
-            }
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                const courseName = this.value;
+                if (this.checked) {
+                    if (!selectedCourses.includes(courseName)) {
+                        selectedCourses.push(courseName);
+                    }
+                } else {
+                    const index = selectedCourses.indexOf(courseName);
+                    if (index !== -1) {
+                        selectedCourses.splice(index, 1);
+                    }
+                }
+                updateSelectedCourses();
+            });
+        });
 
-            function toggleDropdown() {
-                document.getElementById("dropdown-content").classList.toggle("show");
-            }
+        function updateSelectedCourses() {
+            // Sort the selectedCourses array
+            selectedCourses.sort();
 
-            function selectYear(year) {
-                document.getElementById("selected-year").innerText = year;
-            }
+            // Update the selectedCoursesDiv with the sorted courses
+            selectedCoursesDiv.innerHTML = '';
+            selectedCourses.forEach(course => {
+                const courseElement = document.createElement('div');
+                courseElement.classList.add('added-course')
+                courseElement.textContent = course;
+                selectedCoursesDiv.appendChild(courseElement);
+            });
+        }
 
-            // Close the dropdown menu if the user clicks outside of it
-            window.onclick = function(event) {
-                if (!event.target.matches('.dropbtn')) {
-                    var dropdowns = document.getElementsByClassName("dropdown-content");
-                    var i;
-                    for (i = 0; i < dropdowns.length; i++) {
-                        var openDropdown = dropdowns[i];
-                        if (openDropdown.classList.contains('show')) {
-                            openDropdown.classList.remove('show');
-                        }
+        function toggleDropdown() {
+            document.getElementById("dropdown-content").classList.toggle("show");
+        }
+
+        function selectYear(year) {
+            document.getElementById("selected-year").innerText = year;
+        }
+
+        // Close the dropdown menu if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
                     }
                 }
             }
+        }
 
-        </script>
-    </body>
-</html>
+    </script>
+{% endblock %}

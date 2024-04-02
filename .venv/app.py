@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 client = OpenAI()
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/home", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         data = request.json
@@ -28,8 +28,12 @@ def index():
         )
         result = output.choices[0].message.content
         return result
-    return render_template('index.html')
+    return render_template('index.html', hideNavigation=False)
 
 
-if __name__ == "__app__":
+@app.route("/myprofile", methods=['GET', 'POST'])
+def profile():
+    return render_template('profile.html', hideNavigation=False)
+
+if __name__ == "__main__":
     app.run()
