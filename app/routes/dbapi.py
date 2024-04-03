@@ -285,33 +285,32 @@ def delete_plan_course(id):
 
 
 # Create a new course prerequisite
-#@dbapi_blueprint.route('/course-prerequisites', methods=['POST'])
-#def add_course_prerequisite():
-#    data = request.get_json()
-#    new_course_prerequisite = CoursePrerequisite(
-#        courseID=data['courseID'],
-#        prerequisiteCourseID=data['prerequisiteCourseID']
-#    )
-#    db.session.add(new_course_prerequisite)
-#    db.session.commit()
-#    return jsonify(new_course_prerequisite.to_dict()), 201
 @dbapi_blueprint.route('/course-prerequisites', methods=['POST'])
 def add_course_prerequisite():
     data = request.get_json()
-    course = Course.query.get(data['courseID'])
-    prerequisite_course = Course.query.get(data['prerequisiteCourseID'])
+    course_id = data.get('courseID')
+    prerequisite_course_id = data.get('prerequisiteCourseID')
+
+    if not course_id or not prerequisite_course_id:
+        return jsonify({'error': 'Course ID and prerequisite Course ID are required'}), 400
+
+    # Check if the course and the prerequisite course exist
+    course = Course.query.get(course_id)
+    prerequisite_course = Course.query.get(prerequisite_course_id)
 
     if not course or not prerequisite_course:
         return jsonify({'error': 'Course or prerequisite course not found'}), 404
 
-    new_course_prerequisite = CoursePrerequisite(
-        courseID=course.courseID,
-        prerequisiteCourseID=prerequisite_course.courseID
-    )
+    # Check if this prerequisite is already assigned
+    existing_prerequisite = CoursePrerequisite.query.filter_by(courseID=course_id, prerequisiteCourseID=prerequisite_course_id).first()
+    if existing_prerequisite:
+        return jsonify({'message': 'This prerequisite is already assigned to the course'}), 409
+
+    # If not already assigned, proceed with adding the new prerequisite
+    new_course_prerequisite = CoursePrerequisite(courseID=course_id, prerequisiteCourseID=prerequisite_course_id)
     db.session.add(new_course_prerequisite)
     db.session.commit()
     return jsonify(new_course_prerequisite.to_dict()), 201
-
 
 # Get all course prerequisites
 @dbapi_blueprint.route('/course-prerequisites', methods=['GET'])

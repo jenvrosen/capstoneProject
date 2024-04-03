@@ -157,6 +157,16 @@ function deleteCourse(courseID) {
   }
 }
 
+/* Pop up */
+function showPopup(message) {
+  document.getElementById("popupMessage").textContent = message;
+  document.getElementById("popupModal").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popupModal").style.display = "none";
+}
+
 // Ensure the DOM is fully loaded before running the script
 document.addEventListener("DOMContentLoaded", () => {
   // Open the Course Catalog tab by default
