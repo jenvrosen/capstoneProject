@@ -50,6 +50,41 @@ function createCourse() {
     });
 }
 
+/* --- Assign Prerequisite --- */
+function assignPrerequisite() {
+  const courseID = document.getElementById("courseID").value;
+  const prerequisiteCourseID = document.getElementById(
+    "prerequisiteCourseID"
+  ).value;
+
+  fetch("/dbapi/course-prerequisites", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      courseID: courseID,
+      prerequisiteCourseID: prerequisiteCourseID,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("Prerequisite created successfully");
+        window.location.href = "/admin"; // or navigate as needed
+      } else {
+        return response.json().then((data) => {
+          throw new Error(
+            data.message || "An error occurred while creating the prerequisite"
+          );
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Error creating prerequisite: " + error.message);
+    });
+}
+
 /* --- Actions [Edit and Delete] --- */
 
 //To navigate to edit course page
@@ -121,19 +156,6 @@ function deleteCourse(courseID) {
       });
   }
 }
-
-/*
-function editPrerequisite(prerequisiteID) {
-  // Logic to edit a prerequisite
-  console.log("Editing prerequisite", prerequisiteID);
-  // Redirect to the edit prerequisite page or open a modal for editing
-}
-
-function deletePrerequisite(prerequisiteID) {
-  // Logic to delete a prerequisite
-  console.log("Deleting prerequisite", prerequisiteID);
-  // Make a request to the server to delete the prerequisite and then refresh the list
-}*/
 
 // Ensure the DOM is fully loaded before running the script
 document.addEventListener("DOMContentLoaded", () => {

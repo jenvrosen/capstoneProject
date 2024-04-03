@@ -23,12 +23,18 @@ def admin():
     return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
 
 #Render the Search results page
-@view_blueprint.route('/search_courses')
-def search_courses():
-    print("Search courses route called")
-    search_term = request.args.get('search', '')
-    matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
-    return render_template('search_results.html', courses=matching_courses, search_term=search_term)
+#@view_blueprint.route('/search_courses')
+#def search_courses():
+#    print("Search courses route called")
+#    search_term = request.args.get('search', '')
+#    matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
+#    return render_template('search_results.html', courses=matching_courses, search_term=search_term)
+
+#Render page for Assigning prereqs
+@view_blueprint.route('/assign_prerequisite')
+def assign_prerequisite():
+    courses = Course.query.all()  # Fetch all courses to select from
+    return render_template('assign_prerequisite.html', courses=courses)
 
 
 #Render the Create course page
