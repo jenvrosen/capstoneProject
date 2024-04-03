@@ -1,5 +1,6 @@
+#view.py
 #Routes of app that render HTML templates
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from app.models.model import Course, CoursePrerequisite
 
 view_blueprint = Blueprint('view', __name__)
@@ -20,6 +21,15 @@ def admin():
     courses = Course.query.all()  # Fetch all courses
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
     return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
+
+#Render the Search results page
+@view_blueprint.route('/search_courses')
+def search_courses():
+    print("Search courses route called")
+    search_term = request.args.get('search', '')
+    matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
+    return render_template('search_results.html', courses=matching_courses, search_term=search_term)
+
 
 #Render the Create course page
 @view_blueprint.route('/create_course')

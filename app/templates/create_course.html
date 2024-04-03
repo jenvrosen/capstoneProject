@@ -1,3 +1,4 @@
+<!-- create_course.html -->
 {% extends 'base.html' %} {% block styleLogin %}
 <link
   rel="stylesheet"
@@ -12,25 +13,16 @@
 <div class="edit-course-container">
   <form class="edit-course-form" onsubmit="createCourse(); return false;">
     <div class="form-field">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" placeholder="Course Title" />
+      <label for="title">Course Title:</label>
+      <input type="text" id="title" name="title" />
     </div>
     <div class="form-field">
       <label for="department">Department:</label>
-      <input
-        type="text"
-        id="department"
-        name="department"
-        placeholder="Department Name"
-      />
+      <input type="text" id="department" name="department" />
     </div>
     <div class="form-field">
-      <label for="description">Description:</label>
-      <textarea
-        id="description"
-        name="description"
-        placeholder="Course Description"
-      ></textarea>
+      <label for="description">Course Description:</label>
+      <textarea id="description" name="description"></textarea>
     </div>
     <div class="button-container">
       <button type="submit">Create Course</button>

@@ -1,3 +1,4 @@
+<!-- edit_course.html-->
 {% extends 'base.html' %} {% block styleLogin %}
 <link
   rel="stylesheet"
@@ -16,7 +17,7 @@
     class="edit-course-form"
   >
     <div class="form-field">
-      <label for="title">Title:</label>
+      <label for="title">Course Title:</label>
       <input type="text" id="title" name="title" value="{{ course.title }}" />
     </div>
     <div class="form-field">
@@ -29,7 +30,7 @@
       />
     </div>
     <div class="form-field">
-      <label for="description">Description:</label>
+      <label for="description">Course Description:</label>
       <textarea id="description" name="description">
 {{ course.description }}</textarea
       >

@@ -1,4 +1,4 @@
-#API for DB, CRUD operations
+#dbapi.py
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from .. import db
@@ -95,6 +95,14 @@ def get_courses():
 def get_course(course_id):
     course = Course.query.get_or_404(course_id)
     return jsonify(course.to_dict()), 200
+
+#### --- TEST --- ####
+@dbapi_blueprint.route('/courses/search', methods=['GET'])
+def search_courses():
+    search_term = request.args.get('search', '')
+    matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
+    return jsonify([course.to_dict() for course in matching_courses]), 200
+
 
 # Update a course
 @dbapi_blueprint.route('/courses/<int:course_id>', methods=['PUT'])
