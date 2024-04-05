@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 client = OpenAI()
 
-@app.route("/home", methods=['GET', 'POST'])
-def index():
+@app.route("/home", methods=['POST'])
+def sendPrompt():
     if request.method == 'POST':
         data = request.json
         prompt = data.get('prompt')
