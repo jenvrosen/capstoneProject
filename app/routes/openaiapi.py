@@ -10,6 +10,13 @@ home_blueprint = Blueprint('home', __name__)
 load_dotenv()
 
 client = OpenAI()
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> parent of 8ae84e3 (Merged Firebase functionality)
+=======
+>>>>>>> parent of 8ae84e3 (Merged Firebase functionality)
 
 @home_blueprint.route('/home/openai', methods=['POST'])
 def sendPrompt():
