@@ -35,7 +35,11 @@
       </td>
       <td>{{ course.courseID }}</td>
       <td>{{ course.title }}</td>
-      <td>{{ course.description }}</td>
+      <!--<td>{{ course.description }}</td>-->
+      <td>
+        {{ course.description[:300] }}{% if course.description|length > 300
+        %}...{% endif %}
+      </td>
       <td>{{ course.department }}</td>
       <td>{{ course.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
       <td>{{ course.updated.strftime('%Y-%m-%d %H:%M:%S') }}</td>
