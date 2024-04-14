@@ -1,11 +1,14 @@
-from flask import Blueprint, request, jsonify, request
+from flask import Blueprint, request, jsonify, request, url_for, session
 from openai import OpenAI
 from dotenv import load_dotenv
 from datetime import datetime
 from .. import db
 from ..models.model import User, Course, TakenCourse, Plan, PlanCourse, CoursePrerequisite
+import pyrebase
 
 home_blueprint = Blueprint('home', __name__)
+
+print("OpenAi-API INTIALIZED")
 
 load_dotenv()
 
@@ -15,6 +18,12 @@ client = OpenAI() # Had to add api_key=' *our api key* ' in parenthensis to get 
 def sendPrompt():
     data = request.json
     prompt = data.get('prompt')
+    user_id = session.get('user_id')  # Get the user ID from the session !!!!!!!
+
+    print("OpenAI-API connected: ") # Test User ID !!!!!!!
+    print(user_id)
+
+    # passID = some_function_that_requires_user_id(prompt, user_id) #Connect user ID to routes of fucntions where needed as such
 
     output = client.chat.completions.create(
         model="gpt-3.5-turbo",  

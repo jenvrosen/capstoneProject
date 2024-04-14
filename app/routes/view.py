@@ -23,25 +23,32 @@ config = {  # This is the information needed to connect to the firebase server
 firebase = pyrebase.initialize_app(config) #Used to intialize firebase connection
 auth = firebase.auth()
 
-#Render log in page
-@view_blueprint.route('/', methods=['POST','GET'])
+# info = auth.get_account_info(user['idToken']) # Used to print user info in the console
+# print("OPENAI-API CONNECTED: ")
+# print(info)
+
+# Render login page
+@view_blueprint.route('/', methods=['POST', 'GET'])
 def login():
-    if('user' in session):
+    if 'user' in session:
         return redirect(url_for('view.home'))
     if request.method == 'POST':
         email = request.form.get('email')
-        # print(email)
         password = request.form.get('password')
-        # print(password)
         try:
-            user = auth.sign_in_with_email_and_password(email,password)
+            user = auth.sign_in_with_email_and_password(email, password)
             session['user'] = email
+            # Retrieve user_id and store it in the session
+            info = auth.get_account_info(user['idToken'])
+            user_id = info['users'][0]['localId']
+            session['user_id'] = user_id  # Store user_id in the session
+            print("User ID:", user_id)
             return redirect(url_for('view.home'))
         except:
             return 'Failed to login'
     return render_template('login.html', hideNavigation=True)
 
-@view_blueprint.route('/signup', methods=['POST','GET'])
+@view_blueprint.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -49,10 +56,16 @@ def signup():
         try:
             user = auth.create_user_with_email_and_password(email, password)
             session['user'] = email
-            return redirect(url_for('view.home'))  # Redirect to home after successful sign up
+            # Retrieve user_id and store it in the session
+            info = auth.get_account_info(user['idToken'])
+            user_id = info['users'][0]['localId']
+            session['user_id'] = user_id  # Store user_id in the session
+            return redirect(url_for('view.home'))
         except:
             return 'Failed to sign up'
     return render_template('signup.html', hideNavigation=True)
+
+
 
 # Render the Administrator page
 @view_blueprint.route('/admin')
@@ -61,17 +74,27 @@ def admin():
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
     return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
 
+
+
 # Render the Profile page
 @view_blueprint.route('/myprofile')
 def my_profile():
     return render_template('myprofile.html', hideNavigation=False) 
 
+
+
 # Render the Home page
 @view_blueprint.route('/home')
 def home():
+    user_id = session.get('user_id')  # Retrieve user_id from session
+    print("User ID:", user_id)
     return render_template('home.html', hideNavigation=False) 
 
+
+
+# Logout
 @view_blueprint.route('/signout')
 def sign_out():
-    session.pop('user', None)  # Clear the 'user' session data
-    return redirect(url_for('view.login'))  # Redirect to login page after sign out
+    session.pop('user', None)
+    session.pop('user_id', None)  # Clear user_id from session
+    return redirect(url_for('view.login'))

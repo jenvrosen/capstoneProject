@@ -1,12 +1,15 @@
 #dbapi.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, url_for, session
 from datetime import datetime
 from .. import db
 from ..models.model import User, Course, TakenCourse, Plan, PlanCourse, CoursePrerequisite
+import pyrebase
 
 dbapi_blueprint = Blueprint('dbapi', __name__)
 
+print("DB-API INTIALIZED")
 
+# I added the user_id implementation in Create user route in USERS section if your looking to reference it
 
 ### --- Users Crud operations --- ###
 
@@ -30,6 +33,12 @@ def get_user(id):
 @dbapi_blueprint.route('/users', methods=['POST'])
 def create_user():
     data = request.json
+
+    user_id = session.get('user_id')  # Include this in routes that need a user id and utlize "user_id" as such
+
+    print("DB-API connected: ")
+    print(user_id)
+
     user = User(
         email=data['email'], 
         #hashedpassword=data['hashedpassword'], 
