@@ -6,9 +6,8 @@ from .. import db
 #Creating the tables in the database
 
 class User(db.Model):
-    userID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.String(128), primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    #hashedpassword = db.Column(db.String(128), nullable=False)
     firstName = db.Column(db.String(64), nullable=False)
     lastName = db.Column(db.String(64), nullable=False)
     studentYear = db.Column(db.Integer, nullable=False)
