@@ -1,0 +1,71 @@
+<!-- create_course.html -->
+{% extends 'base.html' %} {% block styleLogin %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleEditCourse.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %} {% block content %}
+<div class="edit-course-container">
+  <form
+    class="edit-course-form"
+    id="assignPrerequisiteForm"
+    onsubmit="assignPrerequisite(); return false;"
+  >
+    <div class="form-field">
+      <label for="courseID">Course:</label>
+      <select id="courseID" name="courseID" required>
+        <option value="" disabled selected>-- Select a course --</option>
+        {% for course in courses %}
+        <option value="{{ course.courseID }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="prerequisiteCourseID">Prerequisite Course:</label>
+      <select id="prerequisiteCourseID" name="prerequisiteCourseID" required>
+        <option value="" disabled selected>
+          -- Select a course prerequisite --
+        </option>
+        {% for course in courses %}
+        <option value="{{ course.courseID }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="button-container">
+      <button type="submit">Assign Prerequisite</button>
+    </div>
+  </form>
+</div>
+<!--
+<div class="container">
+  <h1>Assign Prerequisite</h1>
+  <form
+    id="assignPrerequisiteForm"
+    onsubmit="assignPrerequisite(); return false;"
+  >
+    <div class="form-group">
+      <label for="courseID">Course:</label>
+      <select id="courseID" name="courseID" required>
+        {% for course in courses %}
+        <option value="{{ course.courseID }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="prerequisiteCourseID">Prerequisite Course:</label>
+      <select id="prerequisiteCourseID" name="prerequisiteCourseID" required>
+        {% for course in courses %}
+        <option value="{{ course.courseID }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit">Assign Prerequisite</button>
+  </form>
+</div>
+-->
+{% endblock %}

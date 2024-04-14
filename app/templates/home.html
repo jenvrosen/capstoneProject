@@ -1,19 +1,26 @@
 {% extends 'base.html' %} {% block styleLogin %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleHome.css' )}}">
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleHome.css' )}}"
+/>
 {% endblock %} {% block content %}
-    <div class="container" id="container">
-        <div class="plan-container" id="plan-container">
-            <h2>Saved Plans</h2>             
-        </div>
-        <div class="chat-container" id="chat-container">
-            <h2 id="virtual-advisor">Virtual Advisor</h2>
-            <div class="message-container" id="message-container">
-            </div>
-            <div class="input-container">
-                <input type="text" id="prompt" name="prompt" placeholder="Enter prompt...">
-                <button class="send-btn" onclick="sendMessage()" disabled>Send</button>
-            </div>
-        </div>
+<div class="container" id="container">
+  <div class="plan-container" id="plan-container">
+    <h2>Saved Plans</h2>
+  </div>
+  <div class="chat-container" id="chat-container">
+    <h2 id="virtual-advisor">Virtual Advisor</h2>
+    <div class="message-container" id="message-container"></div>
+    <div class="input-container">
+      <input
+        type="text"
+        id="prompt"
+        name="prompt"
+        placeholder="Enter prompt..."
+      />
+      <button class="send-btn" onclick="sendMessage()" disabled>Send</button>
     </div>
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}

@@ -1,3 +1,4 @@
+<!-- admin.html-->
 {% extends 'base.html' %} {% block styleLogin %}
 <link
   rel="stylesheet"
@@ -19,13 +20,15 @@
         name="search"
         placeholder="Enter course name..."
       />
-      <button type="button" id="search-btn">Search</button>
+      <button type="button" id="search-btn" onclick="searchCourses()">
+        Search
+      </button>
     </div>
-    <button type="button" onclick="window.location.href='/create'">
-      Create
+    <button type="button" onclick="window.location.href='/create_course'">
+      Create Course
     </button>
-    <button type="button" onclick="window.location.href='/archive'">
-      Archive
+    <button type="button" onclick="window.location.href='/assign_prerequisite'">
+      Assign Prerequisite
     </button>
   </div>
 
@@ -43,11 +46,13 @@
   <div id="CourseCatalog" class="tabcontent">
     <table id="courseCatalogTable">
       <tr>
-        <th>Action</th>
+        <th>Actions</th>
         <th>Course ID</th>
         <th>Title</th>
         <th>Description</th>
         <th>Department</th>
+        <th>Created</th>
+        <th>Updated</th>
       </tr>
       {% for course in courses %}
       <tr id="courseRow{{ course.courseID }}">
@@ -61,8 +66,14 @@
         </td>
         <td>{{ course.courseID }}</td>
         <td>{{ course.title }}</td>
-        <td>{{ course.description }}</td>
+        <!--<td>{{ course.description }}</td>-->
+        <td>
+          {{ course.description[:300] }}{% if course.description|length > 300
+          %}...{% endif %}
+        </td>
         <td>{{ course.department }}</td>
+        <td>{{ course.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td>{{ course.updated.strftime('%Y-%m-%d %H:%M:%S') }}</td>
       </tr>
       {% endfor %}
     </table>

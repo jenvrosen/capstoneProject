@@ -1,66 +1,67 @@
+/* styleSignup.css */
 body {
-    font-family: Arial, sans-serif;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  .login-container {
-    background-color: #d9d9d9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .form-row {
-    display: flex;
-    width: 100%;
-  }
-  
-  .form-input {
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  
-  .form-input.half {
-    flex: 1;
-    margin-right: 5px;
-  }
-  
-  .form-input.half:last-child {
-    margin-right: 0;
-  }
-  
-  .form-input input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  .login-button {
-    padding: 10px 20px;
-    background-color: #bab2a0;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .login-button:hover {
-    background-color: #98855b;
-  }
+  font-family: Arial, sans-serif;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  background-color: #d9d9d9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-row {
+  display: flex;
+  width: 100%;
+}
+
+.form-input {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-input.half {
+  flex: 1;
+  margin-right: 5px;
+}
+
+.form-input.half:last-child {
+  margin-right: 0;
+}
+
+.form-input input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.login-button {
+  padding: 10px 20px;
+  background-color: #bab2a0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-button:hover {
+  background-color: #98855b;
+}
