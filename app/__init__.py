@@ -16,6 +16,9 @@ from app.models.model import User, Course, TakenCourse, Plan, PlanCourse, Course
 from .routes.dbapi import dbapi_blueprint
 app.register_blueprint(dbapi_blueprint, url_prefix='/dbapi')
 
+from .routes.openaiapi import home_blueprint
+app.register_blueprint(home_blueprint)
+
 # Importing front end routes/blueprints
 from app.routes.view import view_blueprint
 app.register_blueprint(view_blueprint)
