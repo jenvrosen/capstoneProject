@@ -14,6 +14,16 @@ function openTab(evt, tabName) {
 }
 
 /* --- Searching a course --- */
+function searchCourses() {
+  const searchInput = document.getElementById("search").value.trim();
+  if (searchInput) {
+    window.location.href = `/search_results?search=${encodeURIComponent(
+      searchInput
+    )}`;
+  } else {
+    alert("Please enter a course name to search.");
+  }
+}
 
 /* --- Creating a course --- */
 function createCourse() {
