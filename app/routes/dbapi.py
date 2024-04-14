@@ -96,7 +96,7 @@ def get_course(course_id):
     course = Course.query.get_or_404(course_id)
     return jsonify(course.to_dict()), 200
 
-#### --- TEST --- #### (Searching using UI)
+#### --- temp --- #### (Searching using UI)
 @dbapi_blueprint.route('/courses/search', methods=['GET'])
 def search_courses():
     search_term = request.args.get('search', '')
