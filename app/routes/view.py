@@ -74,24 +74,37 @@ def admin():
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
     return render_template('admin.html', courses=courses, prerequisites=prerequisites, hideNavigation=False)
 
-#Render the Search results page
-@view_blueprint.route('/search_results')
-def search_courses():
-    search_term = request.args.get('search', '')
-    matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
-    return render_template('search_results.html', courses=matching_courses, search_term=search_term)
-
-#Render page for Assigning prereqs
-@view_blueprint.route('/assign_prerequisite')
-def assign_prerequisite():
-    courses = Course.query.all()  # Fetch all courses to select from
-    return render_template('assign_prerequisite.html', courses=courses)
 
 
-#Render the Create course page
-@view_blueprint.route('/create_course')
-def create_course():
-    return render_template('create_course.html')
+# Render the Profile page
+@view_blueprint.route('/myprofile')
+def my_profile():
+    return render_template('myprofile.html', hideNavigation=False) # NEEDS FURTHER FIREBASE IMPLEMENTATION
+
+
+# Gaige: whats below this comment appeared for me on vs code so I restored it, I dont know if we need it
+
+# #Render the Search results page
+# @view_blueprint.route('/search_results')
+# def search_courses():
+#     search_term = request.args.get('search', '')
+#     matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
+#     return render_template('search_results.html', courses=matching_courses, search_term=search_term)
+
+# #Render page for Assigning prereqs
+# @view_blueprint.route('/assign_prerequisite')
+# def assign_prerequisite():
+#     courses = Course.query.all()  # Fetch all courses to select from
+#     return render_template('assign_prerequisite.html', courses=courses)
+
+
+# #Render the Create course page
+# @view_blueprint.route('/create_course')
+# def create_course():
+#     return render_template('create_course.html')
+
+
+
 
 
 #Render the Edit course page
@@ -99,12 +112,6 @@ def create_course():
 def edit_course(course_id):
     course = Course.query.get_or_404(course_id) 
     return render_template('edit_course.html', course=course)  
-
-# Render the Profile page
-@view_blueprint.route('/myprofile')
-def my_profile():
-    return render_template('myprofile.html', hideNavigation=False) 
-
 
 
 # Render the Home page
