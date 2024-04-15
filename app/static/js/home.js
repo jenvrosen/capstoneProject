@@ -1,5 +1,6 @@
 const promptInput = document.getElementById('prompt');
 const sendBtn = document.getElementById('send-btn');
+let planData;
 
 // Add an input event listener to the input field
 promptInput.addEventListener('input', function() {
@@ -24,11 +25,15 @@ function sendMessage() {
         body: JSON.stringify({prompt: prompt})
     })
     .then(response => response.text())
-    .then(data => addMessage('bot', data))
+    .then(data => {
+        planData = data;
+        addMessage('bot', data);
+    })
     .catch(error => console.error('Error:', error));
 
     document.getElementById('prompt').value = '';
 }
+
 
 // Allows user to send message using 'Enter' key
 document.getElementById('prompt').addEventListener('keydown', function(event) {
@@ -40,50 +45,62 @@ document.getElementById('prompt').addEventListener('keydown', function(event) {
 
 
 function addMessage(sender, message) {
-        const chatContainer = document.getElementById('message-container');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('chat-message');
-        messageElement.classList.add(sender + '-message');
-        messageElement.innerText = message;
+    const chatContainer = document.getElementById('message-container');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message');
+    messageElement.classList.add(sender + '-message');
+    messageElement.innerText = message;
 
-        if (sender == 'bot') {
-            const bookmarkBtn = document.createElement('button');
-            bookmarkBtn.classList.add('bookmark-btn');
-            bookmarkBtn.innerText = 'Save';
-            messageElement.appendChild(bookmarkBtn);
+    if (sender == 'bot') {
+        const bookmarkBtn = document.createElement('button');
+        bookmarkBtn.classList.add('bookmark-btn');
+        bookmarkBtn.innerText = 'Save';
+        messageElement.appendChild(bookmarkBtn);
 
-            bookmarkBtn.addEventListener('click', function() {
-                
+        bookmarkBtn.addEventListener('click', function() {
+            const planContainer = document.getElementById('plan-container');
+            const plan = document.createElement('button');
+            plan.classList.add('plan');
 
-                const planContainer = document.getElementById('plan-container');
-                const plan = document.createElement('button');
-                plan.classList.add('plan');
+            const modal = document.createElement('div');
+            modal.classList.add('modal');
 
-                const modal = document.createElement('div');
-                modal.classList.add('modal');
-
-                plan.addEventListener('click', function() {
-                    openModal(modal);
-                });
-
-                const closeBtn = document.createElement('button');
-                closeBtn.classList.add('close-btn');
-                closeBtn.addEventListener('click', function() {
-                    closeModal(modal);
-                });
-
-                const modalContent = document.createElement('div');
-                modalContent.classList.add('modal-content');
-                modalContent.innerText = message;
-
-                modalContent.appendChild(closeBtn);
-                modal.appendChild(modalContent);
-                planContainer.appendChild(plan);
-                planContainer.appendChild(modal);
+            plan.addEventListener('click', function() {
+                openModal(modal);
             });
-        }
-        chatContainer.appendChild(messageElement);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.classList.add('close-btn');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.addEventListener('click', function() {
+                closeModal(modal);
+            });
+
+            const modalContent = document.createElement('div');
+            modalContent.classList.add('modal-content');
+            modalContent.innerText = message;
+
+            modalContent.appendChild(closeBtn);
+            modal.appendChild(modalContent);
+            planContainer.appendChild(plan);
+            planContainer.appendChild(modal);
+
+            fetch('/dbapi/plans', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({courses: planData})
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
     }
+    chatContainer.appendChild(messageElement);
+}
 
 
 function openModal(modal) {

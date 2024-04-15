@@ -36,7 +36,11 @@
                 <!-- Add more courses as needed -->
                 </div>
             </div>  
-            <div class="selected-courses" id="selected-courses"></div>
+            <div class="selected-courses" id="selected-courses">
+                {% for courses in courseHistory %}
+                <div class="added-course" id="added-course">{{ course.courseName }}</div>
+                {% endfor %}
+            </div>
         </div>
         <div class="selection-container" id="selection-container">
             <h3>Current Academic Year</h3>
@@ -50,9 +54,9 @@
                     <a href="#" onclick="selectYear('5+ Years')">5+ Years</a>
                 </div>
             </div>
-            <div class="selected-year" id="selected-year"></div>
+            <div class="selected-year" id="selected-year">{{ academicYear }}</div>
         </div>
-                    
+        <button class="save-btn" onclick="saveProfile()">Save</button>
     </div>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}

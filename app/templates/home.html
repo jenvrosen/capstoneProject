@@ -3,7 +3,16 @@
 {% endblock %} {% block content %}
     <div class="container" id="container">
         <div class="plan-container" id="plan-container">
-            <h2>Saved Plans</h2>             
+            <h2>Saved Plans</h2>
+            {% for plans in savedPlans %}
+            <button class="plan" id="plan" onclick="openModal('modal{{ loop.index }}')"></button>
+            <div id="modal{{ loop.index }}" class="modal" id="modal">
+                <div class="modal-content" id="modal-content">
+                    <button class="close-btn" onclick="closeModal('modal{{ loop.index }}')">&times;</button>
+                    <p>{{ plan.planName }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="chat-container" id="chat-container">
             <h2 id="virtual-advisor">Virtual Advisor</h2>
