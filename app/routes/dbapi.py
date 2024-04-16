@@ -143,14 +143,20 @@ def delete_course(course_id):
 @dbapi_blueprint.route('/taken-courses', methods=['POST'])
 def add_taken_course():
     data = request.get_json()
-    new_taken_course = TakenCourse(
-        userID=data['userID'],
-        courseID=data['courseID'],
-        semesterTaken=data['semesterTaken']
-    )
-    db.session.add(new_taken_course)
+    user_id = session.get('user_id')  # Retrieve user_id from session
+
+    for course_data in data:
+        new_taken_course = TakenCourse(
+            userID=user_id,
+            courseID=course_data['courseID'],  # Access courseID attribute
+            semesterTaken=course_data['semesterTaken']
+        )
+
+        db.session.add(new_taken_course)
+
     db.session.commit()
-    return jsonify(new_taken_course.to_dict()), 201
+
+    return jsonify({'message': 'Taken courses added successfully.'}), 201
 
 # Get all taken courses
 @dbapi_blueprint.route('/taken-courses', methods=['GET'])
@@ -164,16 +170,35 @@ def get_taken_course(taken_course_id):
     taken_course = TakenCourse.query.get_or_404(taken_course_id)
     return jsonify(taken_course.to_dict()), 200
 
+
 # Update taken course
-@dbapi_blueprint.route('/taken-courses/<int:taken_course_id>', methods=['PUT'])
-def update_taken_course(taken_course_id):
-    taken_course = TakenCourse.query.get_or_404(taken_course_id)
-    data = request.json
-    taken_course.userID = data.get('userID', taken_course.userID)
-    taken_course.courseID = data.get('courseID', taken_course.courseID)
-    taken_course.semesterTaken = data.get('semesterTaken', taken_course.semesterTaken)
+@dbapi_blueprint.route('/taken-courses', methods=['PUT'])
+def update_taken_courses():
+    data = request.get_json()
+    user_id = session.get('user_id')  # Retrieve Firebase userID from session
+    if not user_id:
+        return jsonify({'message': 'User not logged in.'}), 401
+
+    # Retrieve or create a user record based on the Firebase userID
+    user = User.query.filter_by(userID=user_id).first()
+    if not user:
+        # Handle case where user record does not exist
+        return jsonify({'message': 'User not found.'}), 404
+
+    # Update or create taken courses for the user
+    for course_id in data.get('courseIDs', []):
+        # Check if the course is already taken by the user
+        taken_course = TakenCourse.query.filter_by(userID=user.userID, courseID=course_id).first()
+        if taken_course:
+            # Update existing taken course
+            taken_course.semesterTaken = data.get('semesterTaken')
+        else:
+            # Create new taken course
+            taken_course = TakenCourse(userID=user.userID, courseID=course_id, semesterTaken=data.get('semesterTaken'))
+            db.session.add(taken_course)
+
     db.session.commit()
-    return jsonify(taken_course.to_dict()), 200
+    return jsonify({'message': 'Taken courses updated successfully.'}), 200
 
 # Delete taken course
 @dbapi_blueprint.route('/taken-courses/<int:taken_course_id>', methods=['DELETE'])

@@ -45,7 +45,7 @@ function createCourse() {
     .then((response) => {
       if (response.ok) {
         alert("Course created successfully");
-        window.location.href = "/admin";
+        window.location.href = "/admin_page";
       } else {
         return response.json().then((data) => {
           throw new Error(
@@ -80,7 +80,7 @@ function assignPrerequisite() {
     .then((response) => {
       if (response.ok) {
         alert("Prerequisite created successfully");
-        window.location.href = "/admin"; // or navigate as needed
+        window.location.href = "/admin_page"; // or navigate as needed
       } else {
         return response.json().then((data) => {
           throw new Error(
@@ -168,7 +168,7 @@ function updateCourse(courseID) {
     .then((response) => {
       if (response.ok) {
         alert("Course updated successfully");
-        window.location.href = "/admin";
+        window.location.href = "/admin_page";
       } else {
         response.json().then((data) => {
           alert("Failed to update course: " + data.message);

@@ -1,6 +1,8 @@
 #Routes of app that render HTML templates
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from app.models.model import Course, CoursePrerequisite
+from .. import db
+from app.models.model import User
 import pyrebase
 
 view_blueprint = Blueprint('view', __name__)
@@ -48,22 +50,64 @@ def login():
             return 'Failed to login'
     return render_template('login.html', hideNavigation=True)
 
+
 @view_blueprint.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        
         try:
+            # Check if the user already exists
+            existing_user = User.query.filter_by(email=email).first()
+            if existing_user:
+                return 'User already exists'
+            
+            # Create a new user record
+            new_user = User(
+                email=email,
+                firstName=first_name,
+                lastName=last_name,
+                studentYear=1,  # Set default student year, adjust as needed
+                isAdmin=False   # Set default admin status, adjust as needed
+            )
+            
+            # Add the Firebase UserID to the User record
             user = auth.create_user_with_email_and_password(email, password)
+            firebase_user_id = user['localId']
+            new_user.userID = firebase_user_id
+            
+            # Add the new user to the database
+            db.session.add(new_user)
+            db.session.commit()
+            
+            # Log in the user after successful signup
             session['user'] = email
-            # Retrieve user_id and store it in the session
-            info = auth.get_account_info(user['idToken'])
-            user_id = info['users'][0]['localId']
-            session['user_id'] = user_id  # Store user_id in the session
+            session['user_id'] = firebase_user_id
+            
             return redirect(url_for('view.home'))
-        except:
+        except Exception as e:
+            print(e)
             return 'Failed to sign up'
     return render_template('signup.html', hideNavigation=True)
+# @view_blueprint.route('/signup', methods=['POST', 'GET'])
+# def signup():
+#     if request.method == 'POST':
+#         email = request.form.get('email')
+#         password = request.form.get('password')
+#         try:
+#             user = auth.create_user_with_email_and_password(email, password)
+#             session['user'] = email
+#             # Retrieve user_id and store it in the session
+#             info = auth.get_account_info(user['idToken'])
+#             user_id = info['users'][0]['localId']
+#             session['user_id'] = user_id  # Store user_id in the session
+#             return redirect(url_for('view.home'))
+#         except:
+#             return 'Failed to sign up'
+#     return render_template('signup.html', hideNavigation=True)
 
 
 

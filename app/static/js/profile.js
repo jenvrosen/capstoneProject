@@ -10,7 +10,7 @@ document.querySelectorAll('.added-course').forEach(addedCourse => {
     // Successfully initializes selectedCourses array and checkboxes if the rendered template data
     // matches an existing checkbox value
     checkboxes.forEach(checkbox => {
-        if (checkbox.value === courseName) {
+        if (checkbox.name === courseName) {
             checkbox.checked = true;
             label.classList.add('selected');
             selectedCourses.push(courseName);
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Adds selected checkbox item to selectedCourses array on click
 checkboxes.forEach(checkbox => {
     checkbox.addEventListener('click', function() {
-        const courseName = this.value;
+        const courseName = this.name;
         if (this.checked) {
             if (!selectedCourses.includes(courseName)) {
                 selectedCourses.push(courseName);
@@ -97,32 +97,64 @@ window.onclick = function(event) {
 
 // Saves profile on click
 function saveProfile() {
-    const addedCourses = document.querySelector('.added-courses');
-    const courseNames = Array.from(addedCourses).map(course => course.textContent.trim());
-    const selectedYear = document.getElementById('selected-year').textContent().trim();
+    const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]:checked');
+    const courseData = Array.from(checkboxes).map(checkbox => {
+        const courseID = checkbox.value; // Extract the course ID from the checkbox course_id
+        return { courseID, semesterTaken: 0 }; // Assuming you want to default the semester to 0
+    });
 
-    // Sends PUT request to update course history
+    // Sends POST request to add selected courses to taken courses
     fetch('/dbapi/taken-courses', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({courses: courseNames})
+        body: JSON.stringify(courseData) // Send the array of course data
     })
-    .then(response => response.text())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to add taken courses.');
+        }
+        return response.json();
+    })
     .then(data => {
-        console.log(data);
+        console.log('Taken courses added successfully:', data);
+        // Optionally, perform any actions after successfully adding taken courses
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error adding taken courses:', error);
+        // Optionally, handle errors here
+    });
+    
+    const selectedYear = document.getElementById('selected-year').textContent.trim();
+    let studentYear;
+    switch (selectedYear) {
+        case '1st Year - Freshman':
+            studentYear = 1;
+            break;
+        case '2nd Year - Sophomore':
+            studentYear = 2;
+            break;
+        case '3rd Year - Junior':
+            studentYear = 3;
+            break;
+        case '4th Year - Senior':
+            studentYear = 4;
+            break;
+        case '5th Year - Senior':
+            studentYear = 5;
+            break;
+        default:
+            studentYear = 0; // Handle the case for "5+ Years" or other options
+            break;
+    }
 
-
-    // Sends PUT request to update academic year
-    fetch('/users', {
+    fetch('/dbapi/users/<userID>', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({studentYear: selectedYear})
+        body: JSON.stringify({ studentYear }) // Send the updated studentYear
     })
     .then(response => response.text())
     .then(data => {
