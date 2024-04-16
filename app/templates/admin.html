@@ -44,10 +44,17 @@
 
   <!-- Tab content -->
   <div id="CourseCatalog" class="tabcontent">
+    <button
+      id="delete-selected"
+      style="display: none"
+      onclick="deleteSelectedCourses()"
+    >
+      Delete Selected
+    </button>
     <table id="courseCatalogTable">
       <tr>
+        <th>Select</th>
         <th>Actions</th>
-        <th>Course ID</th>
         <th>Title</th>
         <th>Description</th>
         <th>Department</th>
@@ -57,6 +64,13 @@
       {% for course in courses %}
       <tr id="courseRow{{ course.courseID }}">
         <td>
+          <input
+            type="checkbox"
+            class="delete-checkbox"
+            data-course-id="{{ course.courseID }}"
+          />
+        </td>
+        <td>
           <button onclick="editCourse('{{ course.courseID }}')">
             <i class="fas fa-edit"></i>
           </button>
@@ -64,7 +78,6 @@
             <i class="fas fa-trash"></i>
           </button>
         </td>
-        <td>{{ course.courseID }}</td>
         <td>{{ course.title }}</td>
         <!--<td>{{ course.description }}</td>-->
         <td>

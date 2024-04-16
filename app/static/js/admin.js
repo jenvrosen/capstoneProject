@@ -95,6 +95,53 @@ function assignPrerequisite() {
     });
 }
 
+/* --- Select Entries [Bulk Delete] --- */
+document.addEventListener("DOMContentLoaded", function () {
+  const checkboxes = document.querySelectorAll(".delete-checkbox");
+  const deleteSelectedButton = document.getElementById("delete-selected");
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+      const anyChecked = Array.from(checkboxes).some((c) => c.checked);
+      deleteSelectedButton.style.display = anyChecked ? "block" : "none";
+    });
+  });
+
+  window.deleteSelectedCourses = function () {
+    const selectedCourses = Array.from(
+      document.querySelectorAll(".delete-checkbox")
+    )
+      .filter((c) => c.checked)
+      .map((c) => c.getAttribute("data-course-id"));
+
+    if (confirm("Are you sure you want to delete these courses?")) {
+      selectedCourses.forEach((courseID) => {
+        fetch(`/dbapi/courses/${courseID}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Course deleted successfully:", courseID);
+              const row = document.getElementById(`courseRow${courseID}`);
+              if (row) {
+                row.remove(); // Ensures the DOM is updated
+              }
+            } else {
+              console.error("Failed to delete the course", courseID);
+              alert("Failed to delete the course: " + courseID);
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting course:", courseID, error);
+            alert("Error deleting course: " + courseID + " - " + error);
+          });
+      });
+      // Hide the delete button after processing all deletions
+      document.getElementById("delete-selected").style.display = "none";
+    }
+  };
+});
+
 /* --- Actions [Edit and Delete] --- */
 
 //To navigate to edit course page
