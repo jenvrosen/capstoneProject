@@ -124,3 +124,14 @@
 #prerequisitesTable tr {
   border-bottom: 1px solid #ddd;
 }
+
+#delete-selected {
+  padding: 10px 20px;
+  background-color: #7c0a02;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
