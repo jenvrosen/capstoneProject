@@ -68,7 +68,7 @@ def signup():
 
 
 # Render the Administrator page
-@view_blueprint.route('/admin')
+@view_blueprint.route('/admin_page')
 def admin():
     courses = Course.query.all()  # Fetch all courses
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites

@@ -6,7 +6,7 @@ from .. import db
 #Creating the tables in the database
 
 class User(db.Model):
-    userID = db.Column(db.String(128), primary_key=True)
+    userID = db.Column(db.String(32), primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     firstName = db.Column(db.String(64), nullable=False)
     lastName = db.Column(db.String(64), nullable=False)
@@ -42,9 +42,9 @@ class Course(db.Model):
             'updated': self.updated.isoformat()
         }
 
-class TakenCourse(db.Model):
+class TakenCourse(db.Model): # USER SPECIFIC
     takenCourseID = db.Column(db.Integer, primary_key=True)
-    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    userID = db.Column(db.String(32), db.ForeignKey('user.userID'), nullable=False)
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     semesterTaken = db.Column(db.String(255), nullable=False)
 
@@ -59,9 +59,9 @@ class TakenCourse(db.Model):
             'semesterTaken': self.semesterTaken
         }
 
-class Plan(db.Model):
+class Plan(db.Model): # USER SPECIFIC
     planID = db.Column(db.Integer, primary_key=True)
-    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    userID = db.Column(db.String(32), db.ForeignKey('user.userID'), nullable=False)
     planName = db.Column(db.String(255), nullable=False)
     courses = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
