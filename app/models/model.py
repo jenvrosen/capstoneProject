@@ -42,13 +42,18 @@ class Course(db.Model):
             'updated': self.updated.isoformat()
         }
 
-class TakenCourse(db.Model): # USER SPECIFIC
+class TakenCourse(db.Model):
+    # USER SPECIFIC
     takenCourseID = db.Column(db.Integer, primary_key=True)
     userID = db.Column(db.String(32), db.ForeignKey('user.userID'), nullable=False)
     courseID = db.Column(db.Integer, db.ForeignKey('course.courseID'), nullable=False)
     semesterTaken = db.Column(db.String(255), nullable=False)
+    courseName = db.Column(db.String(255), nullable=False)  # Add this line
 
-    #Establish the relationship to User
+    # Define relationship to Course
+    course = db.relationship('Course', backref=db.backref('taken_courses', lazy=True))
+
+    # Establish the relationship to User
     user = db.relationship('User', backref=db.backref('taken_courses', lazy=True))
 
     def to_dict(self):
@@ -56,7 +61,8 @@ class TakenCourse(db.Model): # USER SPECIFIC
             'takenCourseID': self.takenCourseID,
             'userID': self.userID,
             'courseID': self.courseID,
-            'semesterTaken': self.semesterTaken
+            'semesterTaken': self.semesterTaken,
+            'courseName': self.courseName  # Update this line
         }
 
 class Plan(db.Model): # USER SPECIFIC

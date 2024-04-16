@@ -148,7 +148,8 @@ def add_taken_course():
     for course_data in data:
         new_taken_course = TakenCourse(
             userID=user_id,
-            courseID=course_data['courseID'],  # Access courseID attribute
+            courseID=course_data['courseID'],
+            courseName=course_data['courseName'],  # Add courseName attribute
             semesterTaken=course_data['semesterTaken']
         )
 

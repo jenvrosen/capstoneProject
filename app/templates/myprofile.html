@@ -44,6 +44,14 @@
                 <div class="added-course" id="added-course">{{ course.courseName }}</div>
                 {% endfor %}
             </div>
+            <div>
+                Taken Courses:
+                <ul>
+                    {% for course in taken_courses %}
+                        <li>{{ course.courseName }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
         <div class="selection-container" id="selection-container">
             <h3>Current Academic Year</h3>

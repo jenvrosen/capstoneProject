@@ -3,20 +3,33 @@ const selectedCoursesDiv = document.getElementById('selected-courses');
 let selectedCourses = [];
 
 
-// Initializes selectedCourses array and checkboxes with existing course history
-document.querySelectorAll('.added-course').forEach(addedCourse => {
-    const courseName = addedCourse.innerHTML.trim();
-
-    // Successfully initializes selectedCourses array and checkboxes if the rendered template data
-    // matches an existing checkbox value
+// Initialize selectedCourses array and checkboxes with existing course history
+document.addEventListener('DOMContentLoaded', function() {
     checkboxes.forEach(checkbox => {
-        if (checkbox.name === courseName) {
-            checkbox.checked = true;
-            label.classList.add('selected');
-            selectedCourses.push(courseName);
-        }
+        takenCourses.forEach(takenCourse => {
+            if (checkbox.name === takenCourse.course.title) {
+                checkbox.checked = true;
+                const label = checkbox.parentElement;
+                label.classList.add('selected');
+            }
+        });
     });
 });
+
+// // Initializes selectedCourses array and checkboxes with existing course history
+// document.querySelectorAll('.added-course').forEach(addedCourse => {
+//     const courseName = addedCourse.innerHTML.trim();
+
+//     // Successfully initializes selectedCourses array and checkboxes if the rendered template data
+//     // matches an existing checkbox value
+//     checkboxes.forEach(checkbox => {
+//         if (checkbox.name === courseName) {
+//             checkbox.checked = true;
+//             label.classList.add('selected');
+//             selectedCourses.push(courseName);
+//         }
+//     });
+// });
 
 
 // Highlights/Unhighlights selected checkbox on click
@@ -99,8 +112,9 @@ window.onclick = function(event) {
 function saveProfile() {
     const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]:checked');
     const courseData = Array.from(checkboxes).map(checkbox => {
-        const courseID = checkbox.value; // Extract the course ID from the checkbox course_id
-        return { courseID, semesterTaken: 0 }; // Assuming you want to default the semester to 0
+        const courseID = checkbox.value;
+        const courseName = checkbox.parentNode.textContent.trim(); // Extract course name from label
+        return { courseID, courseName, semesterTaken: 0 };
     });
 
     // Sends POST request to add selected courses to taken courses
@@ -141,15 +155,12 @@ function saveProfile() {
         case '4th Year - Senior':
             studentYear = 4;
             break;
-        case '5th Year - Senior':
-            studentYear = 5;
-            break;
         default:
             studentYear = 0; // Handle the case for "5+ Years" or other options
             break;
     }
 
-    fetch('/dbapi/users/<userID>', {
+    fetch('/dbapi/users/' + userID, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

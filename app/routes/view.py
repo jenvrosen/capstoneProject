@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from app.models.model import Course, CoursePrerequisite
 from .. import db
-from app.models.model import User
+from app.models.model import User, TakenCourse
 import pyrebase
 
 view_blueprint = Blueprint('view', __name__)
@@ -92,24 +92,6 @@ def signup():
             print(e)
             return 'Failed to sign up'
     return render_template('signup.html', hideNavigation=True)
-# @view_blueprint.route('/signup', methods=['POST', 'GET'])
-# def signup():
-#     if request.method == 'POST':
-#         email = request.form.get('email')
-#         password = request.form.get('password')
-#         try:
-#             user = auth.create_user_with_email_and_password(email, password)
-#             session['user'] = email
-#             # Retrieve user_id and store it in the session
-#             info = auth.get_account_info(user['idToken'])
-#             user_id = info['users'][0]['localId']
-#             session['user_id'] = user_id  # Store user_id in the session
-#             return redirect(url_for('view.home'))
-#         except:
-#             return 'Failed to sign up'
-#     return render_template('signup.html', hideNavigation=True)
-
-
 
 # Render the Administrator page
 @view_blueprint.route('/admin_page')
@@ -123,7 +105,21 @@ def admin():
 # Render the Profile page
 @view_blueprint.route('/myprofile')
 def my_profile():
-    return render_template('myprofile.html', hideNavigation=False) # NEEDS FURTHER FIREBASE IMPLEMENTATION
+    user_id = session.get('user_id')  # Retrieve Firebase userID from session
+    if not user_id:
+        # Handle case where user is not logged in
+        return redirect(url_for('auth.login'))  # Redirect to login page or handle appropriately
+
+    # Fetch the user's taken courses and course history from the database
+    taken_courses = TakenCourse.query.filter_by(userID=user_id).all()
+    course_history = []  # You need to fetch this data from wherever it is stored in your database
+
+    print("Taken courses:", taken_courses)  # Debug print
+
+    # Pass the taken courses and course history data to the template
+    return render_template('myprofile.html', taken_courses=taken_courses, courseHistory=course_history, hideNavigation=False)
+
+
 
 
 # #Render the Search results page
