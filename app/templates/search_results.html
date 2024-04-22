@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block styleLogin %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleAdmin.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+{% endblock %} {% block content %}
+<div class="admin-container">
+  <h2>Search Results for '{{ search_term }}'</h2>
+  {% if courses %}
+  <table id="courseCatalogTable">
+    <tr>
+      <th>Actions</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Department</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+    {% for course in courses %}
+    <tr id="courseRow{{ course.courseID }}">
+      <td>
+        <button onclick="editCourse('{{ course.courseID }}')">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button onclick="deleteCourse('{{ course.courseID }}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+      <td>{{ course.title }}</td>
+      <!--<td>{{ course.description }}</td>-->
+      <td>
+        {{ course.description[:300] }}{% if course.description|length > 300
+        %}...{% endif %}
+      </td>
+      <td>{{ course.department }}</td>
+      <td>{{ course.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ course.updated.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <div class="no-results">
+    <p>No match. Please try a different search.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

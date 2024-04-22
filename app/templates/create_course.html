@@ -1,0 +1,32 @@
+<!-- create_course.html -->
+{% extends 'base.html' %} {% block styleLogin %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleEditCourse.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %} {% block content %}
+<div class="edit-course-container">
+  <form class="edit-course-form" onsubmit="createCourse(); return false;">
+    <div class="form-field">
+      <label for="title">Course Title:</label>
+      <input type="text" id="title" name="title" />
+    </div>
+    <div class="form-field">
+      <label for="department">Department:</label>
+      <input type="text" id="department" name="department" />
+    </div>
+    <div class="form-field">
+      <label for="description">Course Description:</label>
+      <textarea id="description" name="description"></textarea>
+    </div>
+    <div class="button-container">
+      <button type="submit">Create Course</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

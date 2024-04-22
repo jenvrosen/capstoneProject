@@ -1,0 +1,123 @@
+<!-- admin.html-->
+{% extends 'base.html' %} {% block styleLogin %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/styleAdmin.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+/>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+{% endblock %} {% block content %}
+<div class="admin-container">
+  <div class="admin-header">
+    <div class="search-container">
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Enter course name..."
+      />
+      <button type="button" id="search-btn" onclick="searchCourses()">
+        Search
+      </button>
+    </div>
+    <button type="button" onclick="window.location.href='/create_course'">
+      Create Course
+    </button>
+    <button type="button" onclick="window.location.href='/assign_prerequisite'">
+      Assign Prerequisite
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'CourseCatalog')">
+      Course Catalog
+    </button>
+    <button class="tablinks" onclick="openTab(event, 'Prerequisites')">
+      Prerequisites
+    </button>
+  </div>
+
+  <!-- Tab content -->
+  <div id="CourseCatalog" class="tabcontent">
+    <button
+      id="delete-selected"
+      style="display: none"
+      onclick="deleteSelectedCourses()"
+    >
+      Delete Selected
+    </button>
+    <table id="courseCatalogTable">
+      <tr>
+        <th>Select</th>
+        <th>Actions</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Department</th>
+        <th>Created</th>
+        <th>Updated</th>
+      </tr>
+      {% for course in courses %}
+      <tr id="courseRow{{ course.courseID }}">
+        <td>
+          <input
+            type="checkbox"
+            class="delete-checkbox"
+            data-course-id="{{ course.courseID }}"
+          />
+        </td>
+        <td>
+          <button onclick="editCourse('{{ course.courseID }}')">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button onclick="deleteCourse('{{ course.courseID }}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+        <td>{{ course.title }}</td>
+        <!--<td>{{ course.description }}</td>-->
+        <td>
+          {{ course.description[:300] }}{% if course.description|length > 300
+          %}...{% endif %}
+        </td>
+        <td>{{ course.department }}</td>
+        <td>{{ course.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td>{{ course.updated.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div id="Prerequisites" class="tabcontent">
+    <table id="prerequisitesTable">
+      <tr>
+        <th>Action</th>
+        <th>Course ID</th>
+        <th>Prerequisite ID</th>
+      </tr>
+      {% for prerequisite in prerequisites %}
+      <tr>
+        <td>
+          <button
+            onclick="editPrerequisite('{{ prerequisite.prerequisiteID }}')"
+          >
+            Edit
+          </button>
+          <button
+            onclick="deletePrerequisite('{{ prerequisite.prerequisiteID }}')"
+          >
+            Delete
+          </button>
+        </td>
+        <td>{{ prerequisite.courseID }}</td>
+        <td>{{ prerequisite.prerequisiteCourseID }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
