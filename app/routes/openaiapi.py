@@ -13,7 +13,7 @@ print("OpenAi-API INTIALIZED")
 
 load_dotenv()
 
-client = OpenAI() # Had to add api_key=' *our api key* ' in parenthensis to get code to run but had to remove it or it wouldent let me push
+client = OpenAI(api_key="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") # Had to add api_key=' *our api key* ' in parenthensis to get code to run but had to remove it or it wouldent let me push
 
 
 def format_courses(courses):
