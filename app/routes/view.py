@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from app.models.model import Course, CoursePrerequisite
 from .. import db
 from app.models.model import User, TakenCourse
+from .decorators import admin_required, login_required
 import pyrebase
 
 view_blueprint = Blueprint('view', __name__)
@@ -95,6 +96,8 @@ def signup():
 
 # Render the Administrator page
 @view_blueprint.route('/admin_page')
+@login_required
+@admin_required
 def admin():
     courses = Course.query.all()  # Fetch all courses
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
@@ -104,6 +107,7 @@ def admin():
 
 # Render the Profile page
 @view_blueprint.route('/myprofile')
+@login_required
 def my_profile():
     user_id = session.get('user_id')  # Retrieve Firebase userID from session
     if not user_id:
@@ -124,6 +128,7 @@ def my_profile():
 
 # #Render the Search results page
 @view_blueprint.route('/search_results')
+@login_required
 def search_courses():
     search_term = request.args.get('search', '')
     matching_courses = Course.query.filter(Course.title.like(f'%{search_term}%')).all()
@@ -131,6 +136,7 @@ def search_courses():
 
 # #Render page for Assigning prereqs
 @view_blueprint.route('/assign_prerequisite')
+@login_required
 def assign_prerequisite():
     courses = Course.query.all()  # Fetch all courses to select from
     return render_template('assign_prerequisite.html', courses=courses)
@@ -138,6 +144,7 @@ def assign_prerequisite():
 
 # #Render the Create course page
 @view_blueprint.route('/create_course')
+@login_required
 def create_course():
     return render_template('create_course.html')
 
