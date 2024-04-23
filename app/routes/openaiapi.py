@@ -55,11 +55,11 @@ def sendPrompt():
     print(user_id)
 
     courses = format_courses(Course.query.all())
-    print(courses)
+    # print(courses)
     # prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
     
     formatted_prompt = format_prompt(user_id, prompt)
-    print(formatted_prompt)
+    # print(formatted_prompt)
 
     # passID = some_function_that_requires_user_id(prompt, user_id) #Connect user ID to routes of fucntions where needed as such
 

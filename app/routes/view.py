@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from app.models.model import Course, CoursePrerequisite
 from .. import db
-from app.models.model import User, TakenCourse
+from app.models.model import User, TakenCourse, Plan
 from .decorators import admin_required, login_required
 import pyrebase
 
@@ -159,12 +159,25 @@ def edit_course(course_id):
     return render_template('edit_course.html', course=course)  
 
 
+# # Render the Home page
+# @view_blueprint.route('/home')
+# def home():
+#     user_id = session.get('user_id')  # Retrieve user_id from session
+#     print("User ID:", user_id)
+#     return render_template('home.html', hideNavigation=False)
+
 # Render the Home page
 @view_blueprint.route('/home')
 def home():
     user_id = session.get('user_id')  # Retrieve user_id from session
-    print("User ID:", user_id)
-    return render_template('home.html', hideNavigation=False) 
+    if not user_id:
+        return redirect(url_for('view.login'))  # Redirect to login if user is not logged in
+
+    # Fetch the user's saved plans from the database based on user_id
+    saved_plans = Plan.query.filter_by(userID=user_id).all()
+
+    # Pass the fetched plans to the home.html template
+    return render_template('home.html', savedPlans=saved_plans, hideNavigation=False)
 
 
 

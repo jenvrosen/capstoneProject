@@ -2,6 +2,17 @@ const promptInput = document.getElementById('prompt');
 const sendBtn = document.getElementById('send-btn');
 let planData;
 
+// View re-loaded plans
+document.querySelectorAll('.plan').forEach(function(planBtn) {
+    planBtn.addEventListener('click', function() {
+        const planID = planBtn.id.replace('plan', '');
+        const modal = document.getElementById('modal' + planID);
+        openModal(modal);
+    });
+});
+
+
+
 // Add an input event listener to the input field
 promptInput.addEventListener('input', function() {
     // Enable or disable the send button based on whether the input field has text
@@ -86,17 +97,21 @@ function addMessage(sender, message) {
             planContainer.appendChild(modal);
 
             fetch('/dbapi/plans', {
-                method: 'POST',
+                method: 'POST',  // Ensure this is set to 'POST'
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({courses: planData})
+                body: JSON.stringify({
+                    courses: planData,
+                    userID: '<firebase_user_id>'
+                })
             })
             .then(response => response.text())
             .then(data => {
                 console.log(data);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error));            
+            
         });
     }
     chatContainer.appendChild(messageElement);

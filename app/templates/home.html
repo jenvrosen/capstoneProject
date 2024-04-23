@@ -4,12 +4,14 @@
     <div class="container" id="container">
         <div class="plan-container" id="plan-container">
             <h2>Saved Plans</h2>
-            {% for plans in savedPlans %}
-            <button class="plan" id="plan" onclick="openModal('modal{{ loop.index }}')"></button>
-            <div id="modal{{ loop.index }}" class="modal" id="modal">
-                <div class="modal-content" id="modal-content">
-                    <button class="close-btn" onclick="closeModal('modal{{ loop.index }}')">&times;</button>
+            {% for plan in savedPlans %}
+            <button class="plan" id="plan{{ plan.planID }}" onclick="openModal('modal{{ plan.planID }}')">{{ plan.planName }}</button>
+            <div id="modal{{ plan.planID }}" class="modal">
+                <div class="modal-content">
+                    <button class="close-btn" onclick="closeModal('modal{{ plan.planID }}')">&times;</button>
                     <p>{{ plan.planName }}</p>
+                    <p>{{ plan.courses }}</p>
+                    <!-- Add more details as needed -->
                 </div>
             </div>
             {% endfor %}
@@ -20,7 +22,7 @@
             </div>
             <div class="input-container">
                 <input type="text" id="prompt" name="prompt" placeholder="Enter prompt...">
-                <button class="send-btn" onclick="sendMessage()" disabled>Send</button>
+                <button class="send-btn" onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>

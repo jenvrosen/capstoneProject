@@ -217,20 +217,21 @@ def delete_taken_course(taken_course_id):
 
 # Create a new plan
 @dbapi_blueprint.route('/plans', methods=['POST'])
-def add_plan():
-    data = request.get_json()
+def create_plan():
+    data = request.json
+    courses = data.get('courses')
+    user_id = session.get('user_id')
 
-    if 'courses' not in data or not data['courses'].strip():
-        return jsonify({'error': 'Courses cannot be empty'}), 400
-
-    new_plan = Plan(
-        userID=data['userID'],
-        planName=data['planName'],
-        courses=data['courses']
+    # Save the plan to the database
+    plan = Plan(
+        userID=user_id,
+        planName='',
+        courses=courses
     )
-    db.session.add(new_plan)
+    db.session.add(plan)
     db.session.commit()
-    return jsonify(new_plan.to_dict()), 201
+
+    return 'Plan saved successfully', 200
 
 # Get all plans
 @dbapi_blueprint.route('/plans', methods=['GET'])
