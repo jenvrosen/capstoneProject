@@ -53,7 +53,7 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 # Update a user
-@dbapi_blueprint.route('/users/<int:id>', methods=['PUT'])
+@dbapi_blueprint.route('/users/<string:id>', methods=['PUT'])
 def update_user(id):
     user = User.query.get_or_404(id)
     data = request.json
@@ -67,6 +67,16 @@ def update_user(id):
     db.session.commit()
     return jsonify(user.to_dict()), 200
 
+# Update a user semester
+@dbapi_blueprint.route('/users/semester/<string:id>', methods=['PUT'])
+def update_user_semester(id):
+    user = User.query.get_or_404(id)
+    data = request.json
+    user.studentYear = data.get('studentYear', user.studentYear)
+
+    db.session.commit()
+    return jsonify(user.to_dict()), 200
+
 # Delete a user
 @dbapi_blueprint.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
@@ -74,6 +84,12 @@ def delete_user(id):
     db.session.delete(user)
     db.session.commit()
     return ({'message': 'User deleted successfully'}), 204
+
+# Flask route to return user ID for the current session
+@dbapi_blueprint.route('/get-user-id')
+def get_user_id():
+    user_id = session.get('user_id')
+    return jsonify({'userID': user_id})
 
 
 

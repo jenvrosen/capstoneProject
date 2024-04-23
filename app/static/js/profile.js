@@ -160,16 +160,28 @@ function saveProfile() {
             break;
     }
 
-    fetch('/dbapi/users/' + userID, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ studentYear }) // Send the updated studentYear
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => console.error('Error:', error));
+    function fetchUserIDAndUpdateStudentYear(studentYear) {
+        fetch('/dbapi/get-user-id')
+        .then(response => response.json())
+        .then(data => {
+            const userID = data.userID;
+            console.log('User ID:', userID);
+            
+            // Send PUT request to update the user's studentYear in the database
+            return fetch('/dbapi/users/semester/' + userID, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ studentYear }) // Send the updated studentYear
+            });
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    fetchUserIDAndUpdateStudentYear(studentYear);
 }
