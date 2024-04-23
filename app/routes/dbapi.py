@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify, redirect, url_for, session
 from datetime import datetime
 from .. import db
 from ..models.model import User, Course, TakenCourse, Plan, PlanCourse, CoursePrerequisite
+from datetime import datetime
 import pyrebase
 
 dbapi_blueprint = Blueprint('dbapi', __name__)
@@ -213,25 +214,44 @@ def delete_taken_course(taken_course_id):
 
 ### --- Plan CRUD Operations --- ###
 
-
-
-# Create a new plan
 @dbapi_blueprint.route('/plans', methods=['POST'])
 def create_plan():
     data = request.json
     courses = data.get('courses')
     user_id = session.get('user_id')
 
-    # Save the plan to the database
+    # Get the current date and time
+    current_datetime = datetime.now()
+    plan_name = current_datetime.strftime('%m-%d-%Y %H:%M')  # Format: YYYY-MM-DD HH:MM:SS
+
+    # Save the plan to the database with the current date and time as the plan name
     plan = Plan(
         userID=user_id,
-        planName='',
+        planName=plan_name,
         courses=courses
     )
     db.session.add(plan)
     db.session.commit()
 
     return 'Plan saved successfully', 200
+
+# # Create a new plan
+# @dbapi_blueprint.route('/plans', methods=['POST'])
+# def create_plan():
+#     data = request.json
+#     courses = data.get('courses')
+#     user_id = session.get('user_id')
+
+#     # Save the plan to the database
+#     plan = Plan(
+#         userID=user_id,
+#         planName='',
+#         courses=courses
+#     )
+#     db.session.add(plan)
+#     db.session.commit()
+
+#     return 'Plan saved successfully', 200
 
 # Get all plans
 @dbapi_blueprint.route('/plans', methods=['GET'])
