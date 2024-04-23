@@ -185,3 +185,46 @@ function saveProfile() {
 
     fetchUserIDAndUpdateStudentYear(studentYear);
 }
+
+
+// Function to fetch the current academic year from the server
+function fetchCurrentUserAcademicYear() {
+    fetch('/dbapi/get-user-id')
+    .then(response => response.json())
+    .then(data => {
+        const userID = data.userID;
+        console.log('User ID:', userID);
+        return fetch('/dbapi/users/year/' + userID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json' // Remove the content type header
+            }
+        }); 
+    })
+    .then(response => response.text())
+    .then(academicYear => {
+        console.log('Academic Year:', academicYear);
+        document.getElementById('selected-year').innerText = getAcademicYearText(parseInt(academicYear)); // Update the selected year dropdown
+    })
+    .catch(error => console.error('Error fetching current academic year:', error));
+}
+
+// Function to convert academic year integer to text
+function getAcademicYearText(year) {
+    switch (year) {
+        case 1:
+            return '1st Year - Freshman';
+        case 2:
+            return '2nd Year - Sophomore';
+        case 3:
+            return '3rd Year - Junior';
+        case 4:
+            return '4th Year - Senior';
+        default:
+            return '5+ Years';
+    }
+}
+
+// Call the function to fetch the current academic year when the DOM content is loaded
+document.addEventListener('DOMContentLoaded', fetchCurrentUserAcademicYear);
+

@@ -91,6 +91,14 @@ def get_user_id():
     user_id = session.get('user_id')
     return jsonify({'userID': user_id})
 
+# Get user year
+@dbapi_blueprint.route('/users/year/<string:id>', methods=['GET'])
+def get_user_year(id):
+    user = User.query.get_or_404(id)
+    curr_term = user.studentYear
+
+    return str(curr_term), 200  # Convert to string before returning
+
 
 
 ###  --- Course Crud Operations --- ###
