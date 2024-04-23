@@ -2,6 +2,16 @@ from functools import wraps
 from flask import session, redirect, url_for, abort
 from ..models.model import User  
 
+# Log in required [Restrict access unless logged in]
+def login_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:  
+            return redirect(url_for('view.login'))  # Redirect to login page
+        return func(*args, **kwargs)
+    return decorated_function
+
+# Restrict admin access
 def admin_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
