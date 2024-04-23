@@ -184,10 +184,14 @@ def add_taken_course():
 
     return jsonify({'message': 'Taken courses added successfully.'}), 201
 
-# Get all taken courses
-@dbapi_blueprint.route('/taken-courses', methods=['GET'])
+# Get all taken courses for the logged-in user
+@dbapi_blueprint.route('/get-taken-courses', methods=['GET'])
 def get_taken_courses():
-    taken_courses = TakenCourse.query.all()
+    user_id = session.get('user_id')  # Retrieve Firebase userID from session
+    if not user_id:
+        return jsonify({'message': 'User not logged in.'}), 401
+
+    taken_courses = TakenCourse.query.filter_by(userID=user_id).all()
     return jsonify([taken_course.to_dict() for taken_course in taken_courses]), 200
 
 # Get Taken course by ID

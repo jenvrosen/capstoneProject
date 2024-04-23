@@ -3,31 +3,44 @@ const selectedCoursesDiv = document.getElementById('selected-courses');
 let selectedCourses = [];
 
 
-// Initialize selectedCourses array and checkboxes with existing course history
+// Fetch taken courses and update checkboxes on page load
 document.addEventListener('DOMContentLoaded', function() {
-    checkboxes.forEach(checkbox => {
-        takenCourses.forEach(takenCourse => {
-            if (checkbox.name === takenCourse.course.title) {
+    fetch('/dbapi/get-taken-courses')
+    .then(response => response.json())
+    .then(data => {
+        // Get an array of course IDs from the taken courses data
+        const takenCourseIDs = data.map(takenCourse => takenCourse.courseID);
+        
+        // Loop through each checkbox
+        checkboxes.forEach(checkbox => {
+            // Check if the course ID of the checkbox matches any of the taken course IDs
+            if (takenCourseIDs.includes(parseInt(checkbox.value))) {
+                // If the course ID matches, check the checkbox
                 checkbox.checked = true;
                 const label = checkbox.parentElement;
                 label.classList.add('selected');
             }
         });
-    });
+        
+        // Update the selectedCourses array with the names of the selected courses
+        selectedCourses = data.map(takenCourse => takenCourse.courseName);
+        
+        // Update the selected courses displayed in the selectedCoursesDiv
+        updateSelectedCourses();
+    })
+    .catch(error => console.error('Error fetching taken courses:', error));
 });
 
-// // Initializes selectedCourses array and checkboxes with existing course history
-// document.querySelectorAll('.added-course').forEach(addedCourse => {
-//     const courseName = addedCourse.innerHTML.trim();
-
-//     // Successfully initializes selectedCourses array and checkboxes if the rendered template data
-//     // matches an existing checkbox value
+// // Initialize selectedCourses array and checkboxes with existing course history
+// document.addEventListener('DOMContentLoaded', function() {
 //     checkboxes.forEach(checkbox => {
-//         if (checkbox.name === courseName) {
-//             checkbox.checked = true;
-//             label.classList.add('selected');
-//             selectedCourses.push(courseName);
-//         }
+//         takenCourses.forEach(takenCourse => {
+//             if (checkbox.name === takenCourse.course.title) {
+//                 checkbox.checked = true;
+//                 const label = checkbox.parentElement;
+//                 label.classList.add('selected');
+//             }
+//         });
 //     });
 // });
 
@@ -109,6 +122,8 @@ window.onclick = function(event) {
 
 
 // Saves profile on click
+
+// Saves profile on click
 function saveProfile() {
     const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]:checked');
     const courseData = Array.from(checkboxes).map(checkbox => {
@@ -117,29 +132,57 @@ function saveProfile() {
         return { courseID, courseName, semesterTaken: 0 };
     });
 
-    // Sends POST request to add selected courses to taken courses
-    fetch('/dbapi/taken-courses', {
-        method: 'POST',
+    // Fetch the current taken courses for the user
+    fetch('/dbapi/get-taken-courses', {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(courseData) // Send the array of course data
+        }
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to add taken courses.');
+            throw new Error('Failed to fetch taken courses.');
         }
         return response.json();
     })
-    .then(data => {
-        console.log('Taken courses added successfully:', data);
-        // Optionally, perform any actions after successfully adding taken courses
+    .then(takenCourses => {
+        // Filter out courses that are already present in takenCourses
+        const newCourseData = courseData.filter(course => !takenCourses.some(takenCourse => takenCourse.courseName === course.courseName));
+        
+        // If there are no new courses to add, exit the function
+        if (newCourseData.length === 0) {
+            console.log('No new courses to add.');
+            return;
+        }
+
+        // Send POST request to add new selected courses to taken courses
+        fetch('/dbapi/taken-courses', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newCourseData) // Send the array of new course data
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add taken courses.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('New taken courses added successfully:', data);
+            // Optionally, perform any actions after successfully adding new taken courses
+        })
+        .catch(error => {
+            console.error('Error adding new taken courses:', error);
+            // Optionally, handle errors here
+        });
     })
     .catch(error => {
-        console.error('Error adding taken courses:', error);
+        console.error('Error fetching taken courses:', error);
         // Optionally, handle errors here
     });
-    
+
     const selectedYear = document.getElementById('selected-year').textContent.trim();
     let studentYear;
     switch (selectedYear) {
@@ -159,6 +202,56 @@ function saveProfile() {
             studentYear = 0; // Handle the case for "5+ Years" or other options
             break;
     }
+// function saveProfile() {
+//     const checkboxes = document.querySelectorAll('.checkbox-content input[type="checkbox"]:checked');
+//     const courseData = Array.from(checkboxes).map(checkbox => {
+//         const courseID = checkbox.value;
+//         const courseName = checkbox.parentNode.textContent.trim(); // Extract course name from label
+//         return { courseID, courseName, semesterTaken: 0 };
+//     });
+
+//     // Sends POST request to add selected courses to taken courses
+//     fetch('/dbapi/taken-courses', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(courseData) // Send the array of course data
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Failed to add taken courses.');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Taken courses added successfully:', data);
+//         // Optionally, perform any actions after successfully adding taken courses
+//     })
+//     .catch(error => {
+//         console.error('Error adding taken courses:', error);
+//         // Optionally, handle errors here
+//     });
+    
+//     const selectedYear = document.getElementById('selected-year').textContent.trim();
+//     let studentYear;
+//     switch (selectedYear) {
+//         case '1st Year - Freshman':
+//             studentYear = 1;
+//             break;
+//         case '2nd Year - Sophomore':
+//             studentYear = 2;
+//             break;
+//         case '3rd Year - Junior':
+//             studentYear = 3;
+//             break;
+//         case '4th Year - Senior':
+//             studentYear = 4;
+//             break;
+//         default:
+//             studentYear = 0; // Handle the case for "5+ Years" or other options
+//             break;
+//     }
 
     function fetchUserIDAndUpdateStudentYear(studentYear) {
         fetch('/dbapi/get-user-id')
