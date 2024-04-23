@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from app.models.model import Course, CoursePrerequisite
 from .. import db
 from app.models.model import User, TakenCourse
+from .decorators import admin_required
 import pyrebase
 
 view_blueprint = Blueprint('view', __name__)
@@ -95,6 +96,7 @@ def signup():
 
 # Render the Administrator page
 @view_blueprint.route('/admin_page')
+@admin_required
 def admin():
     courses = Course.query.all()  # Fetch all courses
     prerequisites = CoursePrerequisite.query.all()  # Fetch all prerequisites
